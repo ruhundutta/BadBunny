@@ -44,13 +44,13 @@
 
     body {
       background-color: var(--bg-color);
-      /* Ambient tropical olive & patriotic blend */
+      /* Ambient tropical olive middle & patriotic red/blue end */
       background-image:
-        radial-gradient(circle at 10% 20%, rgba(85, 107, 47, 0.12) 0%, transparent 50%), /* Olive Tropical Green */
-        radial-gradient(circle at 90% 30%, rgba(200, 16, 46, 0.08) 0%, transparent 40%), /* Red */
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.7) 0%, transparent 60%), /* Bright center */
-        radial-gradient(circle at 80% 80%, rgba(85, 107, 47, 0.1) 0%, transparent 45%), /* Olive Tropical Green */
-        radial-gradient(circle at 20% 90%, rgba(63, 136, 197, 0.08) 0%, transparent 50%); /* Blue */
+        radial-gradient(circle at 50% 5%, rgba(255, 255, 255, 0.8) 0%, transparent 60%), /* Bright top */
+        radial-gradient(circle at 10% 35%, rgba(85, 107, 47, 0.15) 0%, transparent 60%), /* Left Olive */
+        radial-gradient(circle at 80% 55%, rgba(85, 107, 47, 0.18) 0%, transparent 60%), /* Right Tropical Green */
+        radial-gradient(circle at 15% 95%, rgba(200, 16, 46, 0.18) 0%, transparent 60%), /* Bottom Red */
+        radial-gradient(circle at 85% 95%, rgba(63, 136, 197, 0.18) 0%, transparent 60%); /* Bottom Blue */
       background-attachment: fixed;
       color: var(--text-main);
       font-family: var(--font-body);
@@ -111,6 +111,26 @@
       font-family: var(--font-display);
       letter-spacing: 0.05em;
     }
+
+    .watch-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.6rem;
+      background: var(--red);
+      color: #fff !important;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 4px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .watch-btn:hover { background: #a50e25; transform: translateY(-2px); border-bottom: none; }
+    .watch-btn svg { width: 16px; height: 16px; }
 
     /* ============================================================
        IMAGES & CAPTIONS
@@ -415,7 +435,7 @@
     }
 
     /* ============================================================
-       INTERACTIVE HOTSPOTS (CLICK BASED)
+       INTERACTIVE HOTSPOTS (HOVER BASED)
     ============================================================ */
     .interactive-image-wrap {
       position: relative;
@@ -553,11 +573,13 @@
       padding: 1.5rem 1rem;
       text-align: center;
       box-shadow: 6px 6px 0px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
     }
+    .guest-card:hover { transform: translateY(-4px); }
     .guest-img {
       width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
       margin: 0 auto 1rem; border: 3px solid var(--text-main);
-      filter: grayscale(100%) contrast(120%);
     }
     .guest-name { font-family: var(--font-display); font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.2rem; letter-spacing: 0.05em;}
     .guest-role { font-family: var(--font-mono); font-size: 0.75rem; color: var(--red); font-weight: 600; text-transform: uppercase; }
@@ -625,16 +647,16 @@
        FOOTER
     ============================================================ */
     footer {
-      padding: 6rem clamp(2rem, 6vw, 5rem) 2rem;
+      padding: 6rem clamp(2rem, 6vw, 5rem) 3rem;
       background: var(--text-main);
       color: white;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 4rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 2rem;
     }
     @media (max-width: 600px) { footer { grid-template-columns: 1fr; } }
     .footer-brand { font-family: var(--font-display); font-size: 3rem; color: white; margin-bottom: 1rem; line-height: 1; letter-spacing: 0.05em;}
     .footer-sub { color: #aaa; font-size: 1rem; font-family: var(--font-body); }
     .footer-links a { color: #fff; font-family: var(--font-mono); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em;}
-    .footer-links a:hover { color: var(--red); }
+    .footer-links a:hover { color: var(--red); border-bottom: none; }
     .footer-copy { grid-column: 1 / -1; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.1); font-family: var(--font-mono); font-size: 0.75rem; color: #666; text-transform: uppercase; }
 
     /* Animations */
@@ -674,6 +696,10 @@
         <span>13-min performance</span>
         <span>175 cameras</span>
         <span>380 performers</span>
+        <a href="https://www.youtube.com/watch?v=G6FuWd4wNd8" target="_blank" class="watch-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          Watch Full Show
+        </a>
       </div>
     </div>
   </section>
@@ -699,6 +725,14 @@
       a slice of Puerto Rico coded purely for the lens.
     </p>
   </section>
+
+  <!-- Opening Sequence Embed -->
+  <div class="embed-section fade-in" style="max-width: 600px; margin: 0 auto; padding-top: 0; padding-bottom: 2rem;">
+    <div class="label" style="text-align: center; margin-bottom: 1rem;">The Opening Sequence</div>
+    <blockquote class="twitter-tweet" data-theme="light">
+      <a href="https://twitter.com/maoBarraza/status/2020675644762501495"></a>
+    </blockquote>
+  </div>
 
   <figure class="embed-section fade-in" style="max-width: 1200px; margin: 0 auto;">
     <div class="interactive-image-wrap">
@@ -778,10 +812,36 @@
     </div>
   </section>
 
+  <!-- Viral Dwerking Embed -->
+  <div class="embed-section fade-in" style="max-width: 600px; margin: 0 auto; padding-top: 0;">
+    <div class="label" style="text-align: center; margin-bottom: 1rem;">The Viral "Dwerking" Moment</div>
+    <blockquote class="twitter-tweet" data-theme="light">
+      <a href="https://twitter.com/MENin4K/status/2020681501969641595"></a>
+    </blockquote>
+  </div>
+
   <div class="embed-section fade-in" style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 4rem;">
     <figure>
-      <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Badbunnyfalling.webp" alt="Bad Bunny Falling" class="fade-image-y" />
-      <figcaption class="image-caption">The controversial "dwerking" sequence, executed live from the top of the set.</figcaption>
+      <div class="interactive-image-wrap">
+        <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Badbunnyfalling.webp" alt="Bad Bunny Falling" class="fade-image-y" />
+        
+        <div class="hotspot" style="bottom: 25%; left: 20%;">
+          <div class="hotspot-ring"></div>
+          <div class="hotspot-tooltip">
+            <div class="tt-label">La Marqueta</div>
+            <p>A nod to the historic East Harlem marketplace, anchoring the stage in the rich history of the New York diaspora.</p>
+          </div>
+        </div>
+
+        <div class="hotspot hotspot-right" style="bottom: 25%; right: 20%;">
+          <div class="hotspot-ring"></div>
+          <div class="hotspot-tooltip">
+            <div class="tt-label">Lalo's Burger & Bodegas</div>
+            <p>Bodegas and salons are integral to New York's Bronx and Queens boroughs, recreated here as vital cultural lifelines.</p>
+          </div>
+        </div>
+      </div>
+      <figcaption class="image-caption">Bad Bunny falling from the top of the Urban Plaza building set. Hover nodes to explore narrative details.</figcaption>
     </figure>
     
     <figure>
@@ -860,30 +920,24 @@
         <div class="label">La Casita · The Diaspora</div>
         <h2 style="font-size:clamp(2.5rem,5vw,4rem); margin: 0.8rem 0 1.5rem;">The Field Became a Narrative Landscape</h2>
         <p>
-          The emotional centre of the stage was <strong>La Casita</strong> — a salmon-pink house modelled after a real home in Humacao, alongside a Nuyorican barber shop.
+          The emotional centre of the stage was <strong>La Casita</strong> — a salmon-pink house modelled after a real home in Humacao, sitting alongside a vivid recreation of the Nuyorican diaspora.
         </p>
       </div>
       <div>
-         <figure class="interactive-image-wrap">
-           <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/LaCasita.webp" alt="La Casita Entire Set" class="fade-image-y" />
-           
-           <div class="hotspot hotspot-right" style="top: 30%; left: 30%;">
-             <div class="hotspot-ring"></div>
-             <div class="hotspot-tooltip">
-               <div class="tt-label">The Salmon Facade</div>
-               <p>Modeled faithfully after a real working-class home in Humacao, PR, centering ordinary island life on an extraordinary stage.</p>
+         <figure>
+           <div class="interactive-image-wrap">
+             <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/LaCasita.webp" alt="La Casita Entire Set" class="fade-image-y" />
+             
+             <div class="hotspot" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+               <div class="hotspot-ring"></div>
+               <div class="hotspot-tooltip">
+                 <div class="tt-label">The Casita Porch</div>
+                 <p>Celebrities from across the Latin diaspora stood inside and danced here throughout the performance.</p>
+               </div>
              </div>
            </div>
-
-           <div class="hotspot" style="bottom: 20%; right: 25%;">
-             <div class="hotspot-ring"></div>
-             <div class="hotspot-tooltip">
-               <div class="tt-label">Toñita's Bar</div>
-               <p>A replica of the famous Williamsburg social club, collapsing the geographical distance between the island and its NYC diaspora.</p>
-             </div>
-           </div>
+           <figcaption class="image-caption">The La Casita set, where celebrities like Pedro Pascal, Cardi B, and Jessica Alba danced inside. Hover the node to explore.</figcaption>
          </figure>
-         <figcaption class="image-caption">La Casita set structure. Hover nodes to explore narrative details.</figcaption>
       </div>
     </div>
 
@@ -892,37 +946,43 @@
         <figcaption class="image-caption">Bad Bunny alongside surprise guest Lady Gaga inside La Casita.</figcaption>
     </figure>
 
-    <div class="label" style="padding: 0 clamp(2rem, 6vw, 5rem); margin-bottom: 2rem;">The Guest Network</div>
+    <div class="label" style="padding: 0 clamp(2rem, 6vw, 5rem); margin-bottom: 2rem; text-align: center;">The Guest Network (Click to Reveal)</div>
     <div class="guests-grid">
-      <div class="guest-card">
+      <div class="guest-card" onclick="this.classList.toggle('open')">
         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/PedroPascal.webp" alt="Pedro Pascal" class="guest-img" />
         <div class="guest-name">Pedro Pascal</div>
         <div class="guest-role">Actor</div>
+        <div class="guest-detail">The Chilean-American star brought pan-Latino representation to the Casita's porch.</div>
       </div>
-      <div class="guest-card">
+      <div class="guest-card" onclick="this.classList.toggle('open')">
         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/d2686efa3bfeef2841e817fc9df86be20ee362ba/ladygaga%20profile.jpg" alt="Lady Gaga" class="guest-img" />
         <div class="guest-name">Lady Gaga</div>
         <div class="guest-role">Artist</div>
+        <div class="guest-detail">Performed a stunning surprise rendition of "Die With a Smile" alongside Bad Bunny.</div>
       </div>
-      <div class="guest-card">
+      <div class="guest-card" onclick="this.classList.toggle('open')">
         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/cardib%20profile.jpg" alt="Cardi B" class="guest-img" />
         <div class="guest-name">Cardi B</div>
         <div class="guest-role">Rapper</div>
+        <div class="guest-detail">Embodied the Nuyorican spirit, linking her Dominican-Trinidadian Bronx roots to the stage.</div>
       </div>
-      <div class="guest-card">
+      <div class="guest-card" onclick="this.classList.toggle('open')">
         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/jessicaalba.jpg" alt="Jessica Alba" class="guest-img" />
         <div class="guest-name">Jessica Alba</div>
         <div class="guest-role">Actress</div>
+        <div class="guest-detail">Her presence underscored the broader Latina diaspora and hemispheric story.</div>
       </div>
-      <div class="guest-card">
+      <div class="guest-card" onclick="this.classList.toggle('open')">
         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/TonitaCay.avif" alt="Toñita Cay" class="guest-img" />
         <div class="guest-name">Toñita Cay</div>
         <div class="guest-role">NYC Legend</div>
+        <div class="guest-detail">Owner of a beloved Brooklyn social club, pouring a shot to symbolize the island-diaspora bond.</div>
       </div>
-      <div class="guest-card">
+      <div class="guest-card" onclick="this.classList.toggle('open')">
         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/d2686efa3bfeef2841e817fc9df86be20ee362ba/Ricky%20Martin%20profile.avif" alt="Ricky Martin" class="guest-img" />
         <div class="guest-name">Ricky Martin</div>
         <div class="guest-role">Icon</div>
+        <div class="guest-detail">Performed a poignant excerpt from "Lo Que Le Pasó a Hawái" instead of a pop anthem.</div>
       </div>
     </div>
 
@@ -983,9 +1043,13 @@
       <p>
         The Puerto Rican flag that waved was not the modern dark navy blue — it was <em>azul celeste</em>, a pale sky blue. Under the <strong>Gag Law (Law 53 of 1948)</strong>, displaying this specific flag was a criminal offence.
       </p>
+      <p>
+        By waving the light blue flag, a 75-year-old act of civil disobedience was transformed into a live global broadcast. Compare it to the official navy flag adopted in 1952.
+      </p>
     </div>
 
     <div class="flag-visual">
+      <!-- Light Blue Flag (Independence) -->
       <div class="flag-item">
         <div class="flag-svg-wrap">
           <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" style="display:block;">
@@ -1000,7 +1064,26 @@
         </div>
         <div class="flag-meta">
           <div class="flag-year">1895</div>
-          <p><em>Azul celeste</em> — criminalized 1948–1957.</p>
+          <p><em>Azul celeste</em> — original independence flag. Criminalized 1948–1957.</p>
+        </div>
+      </div>
+
+      <!-- Navy Blue Flag (Official) -->
+      <div class="flag-item">
+        <div class="flag-svg-wrap">
+          <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+            <rect width="900" height="120" y="0"   fill="#C8102E"/>
+            <rect width="900" height="120" y="120" fill="#FFFFFF"/>
+            <rect width="900" height="120" y="240" fill="#C8102E"/>
+            <rect width="900" height="120" y="360" fill="#FFFFFF"/>
+            <rect width="900" height="120" y="480" fill="#C8102E"/>
+            <polygon points="0,0 390,300 0,600" fill="#00205B"/>
+            <polygon points="160,220 175,265 222,265 184,292 198,337 160,310 122,337 136,292 98,265 145,265" fill="#FFFFFF"/>
+          </svg>
+        </div>
+        <div class="flag-meta">
+          <div class="flag-year">1952</div>
+          <p><em>Dark Navy</em> — the official Commonwealth flag, adopted to closely match the US flag.</p>
         </div>
       </div>
     </div>
@@ -1034,11 +1117,6 @@
       </div>
     </div>
   </section>
-  
-  <figure class="embed-section fade-in" style="max-width: 1000px; margin: 0 auto;">
-    <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Together%20we%20are%20america.webp" alt="Together We Are America Football" class="fade-image-y" />
-    <figcaption class="image-caption">The controversial football spiked at the performance's climax.</figcaption>
-  </figure>
 
   <!-- ============================================================
        THE SETLIST & APPLE MUSIC
@@ -1124,6 +1202,16 @@
     </div>
   </section>
 
+  <!-- CTA Box -->
+  <div style="margin: 6rem auto 4rem; max-width: 800px; padding: 4rem 3rem; background: var(--surface); border: 2px solid var(--text-main); text-align: center; box-shadow: 15px 15px 0px rgba(0,0,0,0.05);" class="fade-in">
+    <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Experience the Broadcast</h2>
+    <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2rem;">Watch the complete 13-minute 2026 Super Bowl Halftime Show and see the layers of cultural engineering unfold live.</p>
+    <a href="https://www.youtube.com/watch?v=G6FuWd4wNd8" target="_blank" class="watch-btn" style="font-size: 1rem; padding: 1rem 2.5rem;">
+      <svg viewBox="0 0 24 24" fill="currentColor" style="width: 20px; height: 20px;"><path d="M8 5v14l11-7z"/></svg>
+      Watch on YouTube
+    </a>
+  </div>
+
   <!-- ============================================================
        FOOTER
   ============================================================ -->
@@ -1131,6 +1219,15 @@
     <div>
       <div class="footer-brand">BAD BUNNY<br />× SUPER BOWL <span class="lx-usa" style="background: linear-gradient(135deg, #B31942 30%, #fff 45%, #fff 55%, #0A3161 70%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">LX</span></div>
       <p class="footer-sub">An interactive scrollytelling deconstruction of the 2026 NFL Super Bowl Halftime Show.</p>
+      
+      <div style="margin-top: 3rem; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2rem;">
+        <p style="font-family: var(--font-display); font-size: 1.4rem; margin-bottom: 0.8rem; letter-spacing: 0.05em;">About the Author</p>
+        <p style="font-size: 1rem; color: #ccc; line-height: 1.6; max-width: 45ch; margin-bottom: 1.5rem; font-family: var(--font-body);">Rohan Dutta is a digital storyteller and developer passionate about the intersection of pop culture, politics, and new media. He specializes in creating immersive scrollytelling experiences that decode complex cultural moments.</p>
+        <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--red); line-height: 1.8;">
+          Created & written by Rohan Dutta<br>
+          <a href="mailto:ruhundutta@gmail.com" style="color: #fff; border-bottom: 1px solid #fff;">ruhundutta@gmail.com</a> | +91 8967626331
+        </p>
+      </div>
     </div>
     <ul class="footer-links" style="list-style: none;">
       <li><a href="#scene-apagon">El Apagón</a></li>
@@ -1138,9 +1235,10 @@
       <li><a href="#scene-casita">La Casita</a></li>
       <li><a href="#scene-hawaii">Hawái</a></li>
       <li><a href="#setlist-section">Setlist</a></li>
+      <li style="margin-top: 1rem;"><a href="https://www.youtube.com/watch?v=G6FuWd4wNd8" target="_blank" style="color: var(--red); border-bottom: 1px solid var(--red);">▶ Watch Full Show</a></li>
     </ul>
     <div class="footer-copy">
-      Built for GitHub Pages · All media property of their respective owners · 2026
+      Hosted on GitHub · All media property of their respective owners · 2026
     </div>
   </footer>
 
@@ -1174,7 +1272,9 @@
 
     if (apagonBg) apagonBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/Electricity%20poles%20sparking.avif')";
     if (hawaiiBg) hawaiiBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/Ricky%20Martin%20and%20Lo%20Que%20Le%20Pas%C3%B3%20a%20Haw%C3%A1i.avif')";
-    if (finaleBg) finaleBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/bad-bunny-super-bowl-puerto-rico.webp')";
+    
+    // Updated to use the football image for the entire Finale background
+    if (finaleBg) finaleBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Together%20we%20are%20america.webp')";
 
     // ── Interactive D3.js Map (Hover Based Blueprint) ──
     function renderD3Map() {
@@ -1326,7 +1426,8 @@
 
   </script>
 
-  <!-- Instagram embed -->
+  <!-- Missing Scripts Restored -->
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   <script async src="//www.instagram.com/embed.js"></script>
 </body>
 </html>
