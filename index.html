@@ -280,9 +280,9 @@
     .hero-sub {
       font-family: var(--font-headline);
       font-size: clamp(1.4rem, 2.5vw, 2rem);
-      font-weight: 400;
+      font-weight: 700;
       font-style: italic;
-      color: var(--text-muted);
+      color: #000;
       max-width: 45ch;
       line-height: 1.4;
     }
@@ -707,6 +707,30 @@
     @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     .fade-in { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* Scroll Arrow */
+    .scroll-arrow {
+      position: fixed;
+      bottom: 3rem;
+      right: 3rem;
+      width: 2px;
+      height: 60px;
+      background: rgba(0,0,0,0.1);
+      z-index: 100;
+      transition: opacity 0.3s ease;
+      overflow: hidden;
+    }
+    .scroll-arrow::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 50%;
+      background: linear-gradient(to bottom, var(--red), var(--azul));
+      animation: lineScroll 2s infinite ease-in-out;
+    }
+    @keyframes lineScroll {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(200%); }
+    }
   </style>
 </head>
 <body>
@@ -724,6 +748,7 @@
       <li><a href="#scene-casita">La Casita</a></li>
       <li><a href="#scene-hawaii">Hawái</a></li>
       <li><a href="#setlist-section">Setlist</a></li>
+      <li><a href="#timeline-section">Timeline</a></li>
     </ul>
   </nav>
 
@@ -750,6 +775,9 @@
         </a>
       </div>
     </div>
+    
+    <!-- Animated Scroll Indicator -->
+    <div class="scroll-arrow"></div>
   </section>
 
   <!-- Interactive D3 Map Section -->
@@ -785,7 +813,7 @@
       <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/LofiStadiumOverview.webp" alt="Stadium Overview" class="fade-image-y" />
       
       <!-- Stadium Map Hotspots -->
-      <div class="hotspot hotspot-right" style="top: 72%; left: 82%; transform: translate(-50%, -50%);">
+      <div class="hotspot hotspot-right" style="top: 88%; left: 82%; transform: translate(-50%, -50%);">
         <div class="hotspot-ring"></div>
         <div class="hotspot-tooltip">
           <div class="tt-label">The 50-Yard Line</div>
@@ -793,11 +821,19 @@
         </div>
       </div>
       
-      <div class="hotspot hotspot-right" style="top: 60%; left: 20%;">
+      <div class="hotspot hotspot-right" style="top: 60%; left: 30%;">
         <div class="hotspot-ring"></div>
         <div class="hotspot-tooltip">
-          <div class="tt-label">Cinematic Rigs</div>
+          <div class="tt-label">Cinematic Rigs (West)</div>
           <p>Traditional broadcast cameras were replaced by Sony VENICE 2 cinema rigs, giving the live feed a cinematic, movie-like depth of field.</p>
+        </div>
+      </div>
+
+      <div class="hotspot hotspot-right" style="top: 60%; left: 70%;">
+        <div class="hotspot-ring"></div>
+        <div class="hotspot-tooltip">
+          <div class="tt-label">Cinematic Rigs (East)</div>
+          <p>Matching Sony VENICE 2 rigs on the opposite flank ensured the entire 380-person performance was captured in true cinematic format.</p>
         </div>
       </div>
     </div>
@@ -866,6 +902,9 @@
             <span class="blackout-word">digital classroom</span>. Bad Bunny scaled the poles
             before an audience of 128 million people, bringing a searing critique of Puerto Rico's failing infrastructure straight to Middle America.
           </p>
+          <p>
+            The sparking transformers were not just stage props—they were visceral symbols of the chronic blackouts plaguing the island's fragile, heavily privatized power grid since Hurricane Maria. The performance transformed daily infrastructural trauma into an unavoidable global spectacle.
+          </p>
         </div>
       </div>
     </div>
@@ -883,7 +922,7 @@
     <figure>
       <div class="interactive-image-wrap">
         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Badbunnyfalling.webp" alt="Bad Bunny Falling" class="fade-image-y" />
-        
+
         <div class="hotspot" style="bottom: 25%; left: 20%;">
           <div class="hotspot-ring"></div>
           <div class="hotspot-tooltip">
@@ -975,7 +1014,7 @@
     <!-- Text -->
     <div>
       <div class="label">Chapter Two: The Jersey</div>
-      <h2 style="font-size:clamp(2.5rem,5vw,4rem); margin:0.8rem 0 1.5rem;">The "Ocasio 64" Ambiguity</h2>
+      <h2 style="font-size:clamp(2.5rem,5vw,4rem); margin:0.8rem 0 1.5rem;">The "Ocasio 64"</h2>
       <p>
         Bad Bunny took the field wearing a custom cream Zara jersey reading <strong>OCASIO 64</strong>.
         In the new media ecosystem, a single garment transmitted two simultaneous messages.
@@ -1182,26 +1221,39 @@
   </figure>
 
   <!-- ============================================================
-       FINALE VISUAL — PR CROWD IMAGE
+       FINALE VISUAL
   ============================================================ -->
-  <section class="scene" id="finale" style="margin-top: 4rem;">
-    <div class="sticky-wrap">
-      <div class="sticky-bg" id="finale-bg"></div>
-      <div class="sticky-overlay"></div>
-    </div>
-
-    <div class="steps-container">
-      <div class="step">
-        <div class="step-inner">
-          <div class="label">The Hemisphere</div>
-          <h2>Together,<br/>We Are<br/>America</h2>
-          <p>
-            As the performance reached its climax, a stadium-wide rally erupted. The flags of every nation across the Americas were unfurled, while Bad Bunny systematically named each country aloud, refusing to let any single nation dominate the identity of the continent.
-          </p>
-          <p>
-            The word <em>América</em> in Spanish refers to an entire hemisphere: North, Central, and South. The United States' claim on the word as a synonym for itself alone acts as a form of cultural erasure. Bad Bunny's final football spike was a correction. A reclamation. Broadcast live to 128 million people.
-          </p>
-        </div>
+  <section id="finale" class="fade-in" style="margin-top: 4rem; margin-bottom: 4rem; padding: 0 clamp(2rem, 6vw, 5rem); display: flex; justify-content: center;">
+    <div class="step-inner" style="width: 100%; max-width: 900px; margin: 0 auto; opacity: 1; transform: none; display: flex; align-items: center; gap: 4rem; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 300px;">
+        <div class="label">The Hemisphere</div>
+        <h2>Together,<br/>We Are<br/>America</h2>
+        <p>
+          As the performance reached its climax, a stadium-wide rally erupted. The flags of every nation across the Americas were unfurled, while Bad Bunny systematically named each country aloud, refusing to let any single nation dominate the identity of the continent.
+        </p>
+        <p>
+          The word <em>América</em> in Spanish refers to an entire hemisphere: North, Central, and South. The United States' claim on the word as a synonym for itself alone acts as a form of cultural erasure. Bad Bunny's final football spike was a correction. A reclamation. Broadcast live to 128 million people.
+        </p>
+      </div>
+      <div style="flex: 0 0 250px; display: flex; justify-content: center;">
+        <svg viewBox="0 0 800 900" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; filter: drop-shadow(10px 10px 0px rgba(0,0,0,0.1));">
+          <g stroke="var(--surface)" stroke-width="6" stroke-linejoin="round">
+            <!-- North America (Red) -->
+            <g fill="var(--red)">
+              <path d="M 50,150 L 150,100 L 180,200 L 80,220 Z" />
+              <path d="M 150,100 L 450,80 L 500,150 L 420,220 L 180,200 Z" />
+              <path d="M 80,220 L 180,200 L 420,220 L 380,320 L 220,300 L 120,280 Z" />
+              <path d="M 120,280 L 220,300 L 380,320 L 320,400 L 240,380 Z" />
+              <path d="M 320,400 L 380,320 L 450,420 L 420,450 Z" />
+            </g>
+            <!-- South America (Blue) -->
+            <g fill="var(--azul)">
+              <path d="M 420,450 L 450,420 L 550,420 L 520,480 L 450,500 Z" />
+              <path d="M 550,420 L 700,480 L 620,600 L 500,550 L 520,480 Z" />
+              <path d="M 450,500 L 520,480 L 500,550 L 620,600 L 520,800 L 450,800 L 400,650 Z" />
+            </g>
+          </g>
+        </svg>
       </div>
     </div>
   </section>
@@ -1394,6 +1446,7 @@
       <li><a href="#scene-casita">La Casita</a></li>
       <li><a href="#scene-hawaii">Hawái</a></li>
       <li><a href="#setlist-section">Setlist</a></li>
+      <li><a href="#timeline-section">Timeline</a></li>
       <li style="margin-top: 1rem;"><a href="https://www.youtube.com/watch?v=G6FuWd4wNd8" target="_blank" style="color: var(--red); border-bottom: 1px solid var(--red);">▶ Watch Full Show</a></li>
     </ul>
     <div class="footer-copy">
@@ -1407,11 +1460,23 @@
   <script>
     // ── Progress bar ──
     const progressBar = document.getElementById('progress-bar');
+    const scrollArrow = document.querySelector('.scroll-arrow');
     window.addEventListener('scroll', () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const pct = (scrollTop / docHeight) * 100;
       progressBar.style.width = pct + '%';
+      
+      // Fade out scroll arrow at the bottom
+      if (scrollArrow) {
+        if (scrollTop >= docHeight - 200) {
+          scrollArrow.style.opacity = '0';
+          scrollArrow.style.pointerEvents = 'none';
+        } else {
+          scrollArrow.style.opacity = '1';
+          scrollArrow.style.pointerEvents = 'auto';
+        }
+      }
     }, { passive: true });
 
     // ── IntersectionObservers ──
@@ -1427,11 +1492,9 @@
     // ── Sticky background images ──
     const apagonBg = document.getElementById('apagon-bg');
     const hawaiiBg = document.getElementById('hawaii-bg');
-    const finaleBg = document.getElementById('finale-bg');
 
     if (apagonBg) apagonBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/Electricity%20poles%20sparking.avif')";
     if (hawaiiBg) hawaiiBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/Ricky%20Martin%20and%20Lo%20Que%20Le%20Pas%C3%B3%20a%20Haw%C3%A1i.avif')";
-    if (finaleBg) finaleBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Together%20we%20are%20america.webp')";
 
     // ── Interactive D3.js Map (Hover Based Blueprint) ──
     function renderD3Map() {
