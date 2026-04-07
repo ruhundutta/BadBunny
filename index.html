@@ -46,7 +46,7 @@
       background-color: var(--bg-color);
       /* Ambient tropical olive middle & patriotic red/blue end */
       background-image:
-        radial-gradient(circle at 50% 5%, rgba(255, 255, 255, 0.8) 0%, transparent 60%), /* Bright top */
+        radial-gradient(circle at 50% 5%, rgba(255, 255, 255, 0.5) 0%, transparent 60%), /* Bright top (reduced brightness) */
         radial-gradient(circle at 10% 35%, rgba(85, 107, 47, 0.15) 0%, transparent 60%), /* Left Olive */
         radial-gradient(circle at 80% 55%, rgba(85, 107, 47, 0.18) 0%, transparent 60%), /* Right Tropical Green */
         radial-gradient(circle at 15% 95%, rgba(200, 16, 46, 0.18) 0%, transparent 60%), /* Bottom Red */
@@ -69,8 +69,9 @@
       background-image: url('https://raw.githubusercontent.com/ruhundutta/BadBunny/8ad0cb5d0558235d7ce06cb1cac2c76430bb5fc7/bad-bunny-super-bowl-puerto-rico.webp');
       background-size: cover;
       background-position: center;
-      opacity: 0.15;
+      opacity: 0.28;
       mix-blend-mode: overlay;
+      filter: blur(2px);
       z-index: -1;
       pointer-events: none;
     }
@@ -764,7 +765,7 @@
         The 2026 Halftime Show was not a concert. It was a broadcast engineered for
         128 million eyes, a digital classroom coded in symbolism, culture, and defiance.
       </p>
-      <div class="byline">By Rohan Dutta</div>
+      <div class="byline">By Rohan Dutta <span style="margin: 0 10px; color: var(--red);">|</span> 6 Min Read</div>
       <div class="hero-meta">
         <span>13-min performance</span>
         <span>175 cameras</span>
@@ -1224,8 +1225,8 @@
        FINALE VISUAL
   ============================================================ -->
   <section id="finale" class="fade-in" style="margin-top: 4rem; margin-bottom: 4rem; padding: 0 clamp(2rem, 6vw, 5rem); display: flex; justify-content: center;">
-    <div class="step-inner" style="width: 100%; max-width: 900px; margin: 0 auto; opacity: 1; transform: none; display: flex; align-items: center; gap: 4rem; flex-wrap: wrap;">
-      <div style="flex: 1; min-width: 300px;">
+    <div class="step-inner" style="width: 100%; max-width: 1000px; margin: 0 auto; opacity: 1; transform: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: center; gap: 4rem;">
+      <div>
         <div class="label">The Hemisphere</div>
         <h2>Together,<br/>We Are<br/>America</h2>
         <p>
@@ -1235,7 +1236,7 @@
           The word <em>América</em> in Spanish refers to an entire hemisphere: North, Central, and South. The United States' claim on the word as a synonym for itself alone acts as a form of cultural erasure. Bad Bunny's final football spike was a correction. A reclamation. Broadcast live to 128 million people.
         </p>
       </div>
-      <div id="d3-americas-container" style="flex: 0 0 350px; display: flex; justify-content: center; min-height: 400px; width: 100%;">
+      <div id="d3-americas-container" style="display: flex; justify-content: center; min-height: 400px; width: 100%;">
       </div>
     </div>
   </section>
