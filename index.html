@@ -813,7 +813,7 @@
       <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/LofiStadiumOverview.webp" alt="Stadium Overview" class="fade-image-y" />
       
       <!-- Stadium Map Hotspots -->
-      <div class="hotspot hotspot-right" style="top: 88%; left: 82%; transform: translate(-50%, -50%);">
+      <div class="hotspot hotspot-right" style="top: 60%; left: 50%; transform: translate(-50%, -50%);">
         <div class="hotspot-ring"></div>
         <div class="hotspot-tooltip">
           <div class="tt-label">The 50-Yard Line</div>
@@ -1235,25 +1235,7 @@
           The word <em>América</em> in Spanish refers to an entire hemisphere: North, Central, and South. The United States' claim on the word as a synonym for itself alone acts as a form of cultural erasure. Bad Bunny's final football spike was a correction. A reclamation. Broadcast live to 128 million people.
         </p>
       </div>
-      <div style="flex: 0 0 250px; display: flex; justify-content: center;">
-        <svg viewBox="0 0 800 900" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; filter: drop-shadow(10px 10px 0px rgba(0,0,0,0.1));">
-          <g stroke="var(--surface)" stroke-width="6" stroke-linejoin="round">
-            <!-- North America (Red) -->
-            <g fill="var(--red)">
-              <path d="M 50,150 L 150,100 L 180,200 L 80,220 Z" />
-              <path d="M 150,100 L 450,80 L 500,150 L 420,220 L 180,200 Z" />
-              <path d="M 80,220 L 180,200 L 420,220 L 380,320 L 220,300 L 120,280 Z" />
-              <path d="M 120,280 L 220,300 L 380,320 L 320,400 L 240,380 Z" />
-              <path d="M 320,400 L 380,320 L 450,420 L 420,450 Z" />
-            </g>
-            <!-- South America (Blue) -->
-            <g fill="var(--azul)">
-              <path d="M 420,450 L 450,420 L 550,420 L 520,480 L 450,500 Z" />
-              <path d="M 550,420 L 700,480 L 620,600 L 500,550 L 520,480 Z" />
-              <path d="M 450,500 L 520,480 L 500,550 L 620,600 L 520,800 L 450,800 L 400,650 Z" />
-            </g>
-          </g>
-        </svg>
+      <div id="d3-americas-container" style="flex: 0 0 350px; display: flex; justify-content: center; min-height: 400px; width: 100%;">
       </div>
     </div>
   </section>
@@ -1642,7 +1624,78 @@
             .attr("stroke", "#d3122e").attr("stroke-width", 3);
     }
     
-    document.addEventListener("DOMContentLoaded", renderD3Map);
+    function renderAmericasMap() {
+        const container = d3.select("#d3-americas-container");
+        if (container.empty()) return;
+        
+        const width = 400;
+        const height = 500;
+        
+        const svg = container.append("svg")
+            .attr("viewBox", `0 0 ${width} ${height}`)
+            .style("width", "100%")
+            .style("height", "100%")
+            .style("filter", "drop-shadow(10px 10px 0px rgba(0,0,0,0.1))");
+            
+        const mapTooltip = d3.select("body").append("div")
+            .attr("class", "d3-tooltip")
+            .style("opacity", 0)
+            .style("position", "absolute")
+            .style("z-index", "1000");
+
+        d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function(data) {
+            
+            // Filter helpers to capture North/Central and South American countries
+            const isNorth = d => ["USA", "United States", "United States of America", "Canada", "Mexico", "Guatemala", "Belize", "Honduras", "El Salvador", "Nicaragua", "Costa Rica", "Panama", "Cuba", "Dominican Republic", "Haiti", "Jamaica", "Puerto Rico", "Bahamas"].includes(d.properties.name) || ["USA", "CAN", "MEX", "GTM", "BLZ", "HND", "SLV", "NIC", "CRI", "PAN", "CUB", "DOM", "HTI", "JAM", "PRI", "BHS"].includes(d.id);
+            
+            const isSouth = d => ["Colombia", "Venezuela", "Guyana", "Suriname", "Ecuador", "Peru", "Brazil", "Bolivia", "Paraguay", "Chile", "Argentina", "Uruguay"].includes(d.properties.name) || ["COL", "VEN", "GUY", "SUR", "ECU", "PER", "BRA", "BOL", "PRY", "CHL", "ARG", "URY"].includes(d.id);
+            
+            const americasData = data.features.filter(d => isNorth(d) || isSouth(d));
+            
+            // Automatically center and scale the map based on our filtered Americas data
+            const projection = d3.geoMercator()
+                .fitSize([width, height], {type: "FeatureCollection", features: americasData});
+                
+            const path = d3.geoPath().projection(projection);
+            
+            svg.append("g")
+                .selectAll("path")
+                .data(americasData)
+                .enter()
+                .append("path")
+                .attr("d", path)
+                .attr("fill", d => isNorth(d) ? "var(--red)" : "var(--azul)")
+                .attr("stroke", "var(--surface)")
+                .attr("stroke-width", 1)
+                .style("cursor", "pointer")
+                .style("transition", "fill 0.2s, stroke-width 0.2s")
+                .on("mouseover", function(event, d) {
+                    d3.select(this)
+                      .attr("fill", "var(--gold)")
+                      .attr("stroke-width", 2);
+                      
+                    mapTooltip.style("opacity", 1)
+                        .html(`<strong>${d.properties.name}</strong>`)
+                        .style("left", (event.pageX + 15) + "px")
+                        .style("top", (event.pageY - 30) + "px");
+                })
+                .on("mousemove", function(event) {
+                    mapTooltip.style("left", (event.pageX + 15) + "px")
+                              .style("top", (event.pageY - 30) + "px");
+                })
+                .on("mouseout", function(event, d) {
+                    d3.select(this)
+                      .attr("fill", isNorth(d) ? "var(--red)" : "var(--azul)")
+                      .attr("stroke-width", 1);
+                    mapTooltip.style("opacity", 0);
+                });
+        });
+    }
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        renderD3Map();
+        renderAmericasMap();
+    });
 
   </script>
 
