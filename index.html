@@ -140,7 +140,6 @@
       height: auto;
       display: block;
       border-radius: 4px;
-      /* Significantly reduced blur - only soft at the very bottom edge */
       -webkit-mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
@@ -582,7 +581,11 @@
       margin: 0 auto 1rem; border: 3px solid var(--text-main);
     }
     .guest-name { font-family: var(--font-display); font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.2rem; letter-spacing: 0.05em;}
-    .guest-role { font-family: var(--font-mono); font-size: 0.75rem; color: var(--red); font-weight: 600; text-transform: uppercase; }
+    .guest-role { font-family: var(--font-mono); font-size: 0.75rem; color: var(--red); font-weight: 600; text-transform: uppercase; display: none; margin-top: 0.5rem; }
+    .guest-detail { display: none; font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5; }
+    .guest-card.open .guest-role, .guest-card.open .guest-detail { display: block; }
+    .guest-card::after { content: '↓ click to expand'; display: block; font-family: var(--font-mono); font-size: 0.6rem; color: #aaa; margin-top: 1rem; transition: opacity 0.2s; }
+    .guest-card.open::after { content: '↑ collapse'; opacity: 0.6; }
 
     /* HAWAI LYRICS */
     .lyrics-block {
@@ -624,24 +627,37 @@
     }
 
     /* ============================================================
-       EPILOGUE — TIMELINE
+       TIMELINE
     ============================================================ */
-    #epilogue { padding: 4rem clamp(2rem, 6vw, 5rem); max-width: 900px; margin: 0 auto; }
-    .timeline { position: relative; padding-left: 2.5rem; margin-top: 4rem; }
+    #timeline-section { padding: 4rem clamp(2rem, 6vw, 5rem); max-width: 1000px; margin: 0 auto; }
+    .timeline { position: relative; margin: 4rem auto 0; max-width: 100%; padding: 0; }
     .timeline::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
-      background: var(--text-main);
+      content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 4px;
+      background: var(--text-main); transform: translateX(-50%);
     }
-    .tl-item { position: relative; padding-bottom: 4rem; padding-left: 2rem; opacity: 0; transform: translateX(-20px); transition: opacity 0.6s, transform 0.6s; }
+    .tl-item { position: relative; padding-bottom: 4rem; width: 50%; padding-right: 3rem; text-align: right; opacity: 0; transform: translateX(-30px); transition: opacity 0.6s, transform 0.6s; }
+    .tl-item:nth-child(even) { margin-left: 50%; padding-right: 0; padding-left: 3rem; text-align: left; transform: translateX(30px); }
     .tl-item.visible { opacity: 1; transform: translateX(0); }
     .tl-dot {
-      position: absolute; left: -2.95rem; top: 0; width: 20px; height: 20px;
-      border-radius: 50%; background: var(--surface); border: 4px solid var(--red);
+      position: absolute; right: -12px; top: 0; width: 20px; height: 20px;
+      border-radius: 50%; background: var(--surface); border: 4px solid var(--red); z-index: 2;
     }
-    .tl-item:nth-child(2n) .tl-dot { border-color: var(--azul); }
+    .tl-item:nth-child(even) .tl-dot { left: -12px; right: auto; border-color: var(--azul); }
+    .tl-item.climax .tl-dot { border-color: var(--gold) !important; }
     .tl-time { font-family: var(--font-mono); font-size: 0.85rem; color: var(--red); font-weight: 600; margin-bottom: 0.5rem; letter-spacing: 0.05em;}
-    .tl-head { font-family: var(--font-headline); font-size: 1.8rem; font-weight: 900; color: var(--text-main); margin-bottom: 0.8rem; }
-    .tl-body { font-size: 1.05rem; color: var(--text-muted); max-width: 55ch; }
+    .tl-head { font-family: var(--font-body); font-size: 1.5rem; font-weight: 900; color: var(--text-main); margin-bottom: 0.8rem; }
+    .tl-body { font-size: 1.05rem; color: var(--text-muted); max-width: 100%; }
+
+    @media (max-width: 768px) {
+      .timeline::before { left: 0; transform: none; }
+      .tl-item { width: 100%; padding-right: 0; padding-left: 2.5rem; text-align: left !important; transform: translateX(-20px); }
+      .tl-item:nth-child(even) { margin-left: 0; padding-left: 2.5rem; transform: translateX(-20px); text-align: left; }
+      .tl-dot { left: -10px; right: auto; }
+      .tl-item:nth-child(even) .tl-dot { left: -10px; }
+    }
+
+    /* EPILOGUE */
+    #epilogue { padding: 4rem clamp(2rem, 6vw, 5rem); max-width: 900px; margin: 0 auto; }
 
     /* ============================================================
        FOOTER
@@ -689,7 +705,7 @@
       <h1>Bad Bunny<br />& the New Media<br />Super Bowl <span class="lx-usa">LX</span></h1>
       <p class="hero-sub">
         The 2026 Halftime Show was not a concert. It was a broadcast engineered for
-        128 million eyes — a digital classroom coded in symbolism, culture, and defiance.
+        128 million eyes, a digital classroom coded in symbolism, culture, and defiance.
       </p>
       <div class="byline">By Rohan Dutta</div>
       <div class="hero-meta">
@@ -720,16 +736,14 @@
   <section id="intro" class="fade-in">
     <span class="big-stat">128M</span>
     <p>
-      While 68,000 sat inside Levi's Stadium, the real audience was everywhere else —
-      watching through 175 Sony cinema cameras that turned a football field into
-      a slice of Puerto Rico coded purely for the lens.
+      While 68,000 sat inside Levi's Stadium, the real audience was everywhere else. They watched through 175 Sony cinema cameras that turned a football field into a slice of Puerto Rico coded purely for the lens.
     </p>
   </section>
 
   <!-- Opening Sequence Embed -->
   <div class="embed-section fade-in" style="max-width: 600px; margin: 0 auto; padding-top: 0; padding-bottom: 2rem;">
     <div class="label" style="text-align: center; margin-bottom: 1rem;">The Opening Sequence</div>
-    <blockquote class="twitter-tweet" data-theme="light">
+    <blockquote class="twitter-tweet" data-theme="light" data-conversation="none">
       <a href="https://twitter.com/maoBarraza/status/2020675644762501495"></a>
     </blockquote>
   </div>
@@ -739,7 +753,7 @@
       <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/LofiStadiumOverview.webp" alt="Stadium Overview" class="fade-image-y" />
       
       <!-- Stadium Map Hotspots -->
-      <div class="hotspot" style="top: 45%; left: 50%; transform: translate(-50%, -50%);">
+      <div class="hotspot hotspot-right" style="top: 72%; left: 82%; transform: translate(-50%, -50%);">
         <div class="hotspot-ring"></div>
         <div class="hotspot-tooltip">
           <div class="tt-label">The 50-Yard Line</div>
@@ -747,7 +761,7 @@
         </div>
       </div>
       
-      <div class="hotspot hotspot-right" style="top: 25%; left: 20%;">
+      <div class="hotspot hotspot-right" style="top: 60%; left: 20%;">
         <div class="hotspot-ring"></div>
         <div class="hotspot-tooltip">
           <div class="tt-label">Cinematic Rigs</div>
@@ -777,6 +791,19 @@
           <p>
             Creative director <strong>Harriet Cuddeford</strong> and <strong>Yellow Studio</strong>
             faced the NFL's hard cap: no more than 25 motorized carts. Their solution? 380 human beings costumed as sugarcane, capable of walking off the field instantly, replacing machines with sheer manpower.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-inner">
+          <div class="label">The Live Broadcast</div>
+          <h2>Friction as Authenticity</h2>
+          <p>
+            Unlike Kendrick Lamar's hyper-precise, militarily choreographed 2025 halftime show, Bad Bunny's performance embraced friction. Early in the set, he battled noticeable mic issues, his raw vocals fighting against the stadium mix. 
+          </p>
+          <p>
+            Yet, rather than derailing the spectacle, the technical flaws made the broadcast feel startlingly intimate and real. It stripped away the polished veneer of the NFL machine, turning the world's biggest stage into a massive, unpredictable block party.
           </p>
         </div>
       </div>
@@ -814,10 +841,10 @@
 
   <!-- Viral Dwerking Embed -->
   <div class="embed-section fade-in" style="max-width: 600px; margin: 0 auto; padding-top: 0;">
-    <div class="label" style="text-align: center; margin-bottom: 1rem;">The Viral "Dwerking" Moment</div>
-    <blockquote class="twitter-tweet" data-theme="light">
+    <blockquote class="twitter-tweet" data-theme="light" data-conversation="none">
       <a href="https://twitter.com/MENin4K/status/2020681501969641595"></a>
     </blockquote>
+    <div class="label" style="text-align: center; margin-top: 1rem;">The Viral "Dwerking" Moment</div>
   </div>
 
   <div class="embed-section fade-in" style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 4rem;">
@@ -833,7 +860,7 @@
           </div>
         </div>
 
-        <div class="hotspot hotspot-right" style="bottom: 25%; right: 20%;">
+        <div class="hotspot hotspot-right" style="bottom: 25%; right: 10%;">
           <div class="hotspot-ring"></div>
           <div class="hotspot-tooltip">
             <div class="tt-label">Lalo's Burger & Bodegas</div>
@@ -848,6 +875,32 @@
       <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Badbunny%20on%20car.webp" alt="Bad Bunny on Car" class="fade-image-y" />
       <figcaption class="image-caption">Ocasio atop the motorized prop car, directly engaging the stadium cameras.</figcaption>
     </figure>
+  </div>
+
+  <!-- Safaera Backlash Section -->
+  <div class="embed-section fade-in" style="max-width: 1200px; margin: 4rem auto; padding-top: 0;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem; align-items: stretch;">
+      <!-- Left: Embed -->
+      <div style="display: flex; flex-direction: column; justify-content: center;">
+        <div class="label" style="text-align: center; margin-bottom: 1rem;">The "Safaera" Backlash</div>
+        <blockquote class="twitter-tweet" data-theme="light" data-conversation="none">
+          <a href="https://twitter.com/MLFootball/status/2020963703483716085"></a>
+        </blockquote>
+      </div>
+      <!-- Right: Analysis -->
+      <div style="background: var(--surface); padding: 2.5rem; border: 2px solid var(--text-main); box-shadow: 10px 10px 0px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: center;">
+        <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Queer Representation and Moral Panic</h3>
+        <p style="font-size: 1rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Bad Bunny performed the underground reggaeton anthem "Safaera." While he sang, two male dancers ground against each other on national television.
+        </p>
+        <p style="font-size: 1rem; color: var(--text-muted); margin-bottom: 1rem;">
+          The moment triggered an immediate culture war. The outrage reinforced the show's dual reality: a celebration for the diaspora and a deliberate provocation to conservative America.
+        </p>
+        <p style="font-size: 1rem; color: var(--text-muted);">
+          By centering unapologetic queer intimacy in the hyper-masculine arena of the NFL, Bad Bunny continued his career-long project of dismantling traditional machismo. The performance forced 128 million viewers to confront reggaeton's intersectional roots and the realities of queer Latinidad on the biggest stage possible.
+        </p>
+      </div>
+    </div>
   </div>
 
   <!-- ============================================================
@@ -867,7 +920,7 @@
         <div class="hotspot hotspot-right" style="top: 25%; left: 20%;">
           <div class="hotspot-ring"></div>
           <div class="hotspot-tooltip">
-            <div class="tt-label">Reading 1 — Family</div>
+            <div class="tt-label">Reading 1: Family</div>
             <p><em>Ocasio</em> is Bad Bunny's maternal surname. A deeply personal tribute to his late uncle stitched into the biggest stage on earth.</p>
           </div>
         </div>
@@ -876,8 +929,8 @@
         <div class="hotspot" style="bottom: 25%; right: 20%;">
           <div class="hotspot-ring"></div>
           <div class="hotspot-tooltip">
-            <div class="tt-label">Reading 2 — Political</div>
-            <p><em>64</em> was the government's initial, heavily disputed Hurricane Maria death toll—the number that triggered mass protests.</p>
+            <div class="tt-label">Reading 2: Political</div>
+            <p><em>64</em> was the government's initial, heavily disputed Hurricane Maria death toll, the number that triggered mass protests.</p>
           </div>
         </div>
 
@@ -889,7 +942,7 @@
 
     <!-- Text -->
     <div>
-      <div class="label">Chapter Two — The Jersey</div>
+      <div class="label">Chapter Two: The Jersey</div>
       <h2 style="font-size:clamp(2.5rem,5vw,4rem); margin:0.8rem 0 1.5rem;">The "Ocasio 64" Ambiguity</h2>
       <p>
         Bad Bunny took the field wearing a custom cream Zara jersey reading <strong>OCASIO 64</strong>.
@@ -917,10 +970,10 @@
 
     <div class="casita-header">
       <div>
-        <div class="label">La Casita · The Diaspora</div>
+        <div class="label">La Casita: The Diaspora</div>
         <h2 style="font-size:clamp(2.5rem,5vw,4rem); margin: 0.8rem 0 1.5rem;">The Field Became a Narrative Landscape</h2>
         <p>
-          The emotional centre of the stage was <strong>La Casita</strong> — a salmon-pink house modelled after a real home in Humacao, sitting alongside a vivid recreation of the Nuyorican diaspora.
+          The emotional centre of the stage was <strong>La Casita</strong>, a salmon-pink house modelled after a real home in Humacao, sitting alongside a vivid recreation of the Nuyorican diaspora.
         </p>
       </div>
       <div>
@@ -928,7 +981,7 @@
            <div class="interactive-image-wrap">
              <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/LaCasita.webp" alt="La Casita Entire Set" class="fade-image-y" />
              
-             <div class="hotspot" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+             <div class="hotspot" style="top: 65%; left: 50%; transform: translate(-50%, -50%);">
                <div class="hotspot-ring"></div>
                <div class="hotspot-tooltip">
                  <div class="tt-label">The Casita Porch</div>
@@ -1017,7 +1070,7 @@
           <div class="label">Lo Que Le Pasó a Hawái</div>
           <h2>A Warning, Not an Anthem</h2>
           <p>
-            Everyone expected <em>Livin' la Vida Loca</em>. Instead, Ricky Martin delivered an excerpt from Bad Bunny's <strong>"Lo Que Le Pasó a Hawái"</strong> — framing Hawaii as a cautionary tale for Puerto Rico.
+            Everyone expected <em>Livin' la Vida Loca</em>. Instead, Ricky Martin delivered an excerpt from Bad Bunny's <strong>"Lo Que Le Pasó a Hawái"</strong>, framing Hawaii as a cautionary tale for Puerto Rico.
           </p>
           <div class="lyrics-block">
             <div class="lyrics-es">"Se vendió el río, se vendió la playa…"</div>
@@ -1041,7 +1094,7 @@
       <div class="label" style="margin-bottom:0.8rem;">The Azul Celeste</div>
       <h2 style="font-size:clamp(2.5rem,5vw,4rem); margin-bottom:1.5rem;">Colors Carry History</h2>
       <p>
-        The Puerto Rican flag that waved was not the modern dark navy blue — it was <em>azul celeste</em>, a pale sky blue. Under the <strong>Gag Law (Law 53 of 1948)</strong>, displaying this specific flag was a criminal offence.
+        The Puerto Rican flag that waved was not the modern dark navy blue; it was <em>azul celeste</em>, a pale sky blue. Under the <strong>Gag Law (Law 53 of 1948)</strong>, displaying this specific flag was a criminal offence.
       </p>
       <p>
         By waving the light blue flag, a 75-year-old act of civil disobedience was transformed into a live global broadcast. Compare it to the official navy flag adopted in 1952.
@@ -1064,7 +1117,7 @@
         </div>
         <div class="flag-meta">
           <div class="flag-year">1895</div>
-          <p><em>Azul celeste</em> — original independence flag. Criminalized 1948–1957.</p>
+          <p><em>Azul celeste</em>: original independence flag. Criminalized 1948–1957.</p>
         </div>
       </div>
 
@@ -1083,7 +1136,7 @@
         </div>
         <div class="flag-meta">
           <div class="flag-year">1952</div>
-          <p><em>Dark Navy</em> — the official Commonwealth flag, adopted to closely match the US flag.</p>
+          <p><em>Dark Navy</em>: the official Commonwealth flag, adopted to closely match the US flag.</p>
         </div>
       </div>
     </div>
@@ -1111,12 +1164,20 @@
           <div class="label">The Hemisphere</div>
           <h2>Together,<br/>We Are<br/>America</h2>
           <p>
-            The word <em>América</em> in Spanish refers to an entire hemisphere. Bad Bunny's final football spike was a correction. A reclamation. Broadcast live to 128 million people.
+            As the performance reached its climax, a stadium-wide rally erupted. The flags of every nation across the Americas were unfurled, while Bad Bunny systematically named each country aloud, refusing to let any single nation dominate the identity of the continent.
+          </p>
+          <p>
+            The word <em>América</em> in Spanish refers to an entire hemisphere: North, Central, and South. The United States' claim on the word as a synonym for itself alone acts as a form of cultural erasure. Bad Bunny's final football spike was a correction. A reclamation. Broadcast live to 128 million people.
           </p>
         </div>
       </div>
     </div>
   </section>
+
+  <figure class="embed-section fade-in" style="max-width: 1000px; margin: 0 auto;">
+    <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Together%20we%20are%20america.webp" alt="Together We Are America Football" class="fade-image-y" />
+    <figcaption class="image-caption">The controversial football spiked at the performance's climax.</figcaption>
+  </figure>
 
   <!-- ============================================================
        THE SETLIST & APPLE MUSIC
@@ -1157,11 +1218,135 @@
               <div class="label" style="margin-bottom: 0.8rem;">DtMF</div>
               <iframe src="https://www.youtube.com/embed/TiebZllW8As?si=_zGvtOrjj0HV0WJ2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
+          <div>
+              <div class="label" style="margin-bottom: 0.8rem;">Party</div>
+              <iframe src="https://www.youtube.com/embed/ZuJbaB27LzY?si=m7TIPoXqrAVfTvTZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+          <div>
+              <div class="label" style="margin-bottom: 0.8rem;">EoO</div>
+              <iframe src="https://www.youtube.com/embed/JYekRpqL4O8?si=c-GqBPsz1V2L5cXb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+          <div>
+              <div class="label" style="margin-bottom: 0.8rem;">Die With a Smile</div>
+              <iframe src="https://www.youtube.com/embed/RVDCeVG90Rg?si=Ymj8k5V1lFC2EcVb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+          <div>
+              <div class="label" style="margin-bottom: 0.8rem;">NUEVAYoL</div>
+              <iframe src="https://www.youtube.com/embed/WdSGEvDGZAo?si=vQ4FeoB38nWg6eA1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+          <div>
+              <div class="label" style="margin-bottom: 0.8rem;">El Apagón</div>
+              <iframe src="https://www.youtube.com/embed/wv-7XkS3-jQ?si=wdKHZYP31jinwfjU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
       </div>
   </section>
 
   <!-- ============================================================
-       EPILOGUE — TIMELINE
+       TIMELINE SECTION
+  ============================================================ -->
+  <section id="timeline-section">
+    <div class="chapter-break" style="padding: 2rem 0; justify-content: center;">
+      <span class="label" style="font-size: 2rem;">Minute-By-Minute Breakdown</span>
+    </div>
+    
+    <div class="timeline">
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Minute 1</div>
+        <div class="tl-head">Opening: "Tití Me Preguntó"</div>
+        <div class="tl-body">Ocasio emerges at the 20-yard line in a field of sugar cane, walking past farmers in pava hats and a piragua stand.</div>
+      </div>
+
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Minute 2</div>
+        <div class="tl-head">"Yo Perreo Sola"</div>
+        <div class="tl-body">The artist emerges on the roof of a "casita" (little house), surrounded by dancers in an energetic house-party scene.</div>
+      </div>
+
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Minute 3</div>
+        <div class="tl-head">Medley: "Safaera" & "Party"</div>
+        <div class="tl-body">A high-energy sequence celebrating the roots of reggaeton, with dancers dressed as "viejitos" playing dominoes.</div>
+      </div>
+
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Minute 4</div>
+        <div class="tl-head">"VOY A LLeVARTE PA PR"</div>
+        <div class="tl-body">Celeb cameos like Cardi B and Pedro Pascal appear as party guests in the background.</div>
+      </div>
+
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Minute 5</div>
+        <div class="tl-head">"EoO"</div>
+        <div class="tl-body">Performed on top of a pickup truck, emphasizing a "giant street party" atmosphere.</div>
+      </div>
+
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Minute 6</div>
+        <div class="tl-head">"MONACO"</div>
+        <div class="tl-body">Orchestral strings play as the scene shifts to an elevated plaza hosting a wedding ceremony.</div>
+      </div>
+
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Minute 7</div>
+        <div class="tl-head">Lady Gaga Surprise: "Die with a Smile"</div>
+        <div class="tl-body">Gaga appears at the wedding to sing a salsa-inflected version of her hit duet; Ocasio serves as a wedding witness.</div>
+      </div>
+
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Minute 8</div>
+        <div class="tl-head">Salsa Transition: "BAILE INoLVIDABLE"</div>
+        <div class="tl-body">Bad Bunny and Gaga perform a salsa dance together; he changes into a white Monobloc-style suit.</div>
+      </div>
+
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Minute 9</div>
+        <div class="tl-head">"NUEVAYoL"</div>
+        <div class="tl-body">Set in a recreation of a Latino neighborhood in NYC, featuring detailed storefronts and a bodega.</div>
+      </div>
+
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Minute 10</div>
+        <div class="tl-head">Ricky Martin Surprise: "LO QUE LE PASÓ A HAWAii"</div>
+        <div class="tl-body">Martin performs a rallying cry for autonomy as "power lines" behind him explode, symbolizing blackouts.</div>
+      </div>
+
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Minute 11</div>
+        <div class="tl-head">Political Statement: "El Apagón"</div>
+        <div class="tl-body">Focus on Puerto Rico's resilience after Hurricane Maria; dancers climb power poles symbolic of grid failures.</div>
+      </div>
+
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Minute 12</div>
+        <div class="tl-head">Direct Address & "CAFÉ CON RON"</div>
+        <div class="tl-body">Ocasio addresses the camera in Spanish, urging youth to believe in themselves.</div>
+      </div>
+
+      <div class="tl-item climax fade-in">
+        <div class="tl-dot" style="border-color: var(--gold);"></div>
+        <div class="tl-time" style="color: var(--gold);">Minute 13</div>
+        <div class="tl-head">Finale: "DtMF" & Flag Parade</div>
+        <div class="tl-body">
+          A massive parade of flags from all the Americas closes the show as Ocasio exits through the end zone. The performance becomes a real-time global debate over history, borders, and identity.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       EPILOGUE
   ============================================================ -->
   <section id="epilogue">
     <div class="label" style="margin-bottom:1rem;">Epilogue</div>
@@ -1171,34 +1356,9 @@
     </p>
 
     <!-- SNL Video Embed -->
-    <div style="margin: 4rem 0;">
+    <div style="margin: 4rem 0;" class="fade-in">
         <div class="label" style="margin-bottom: 1rem;">Bad Bunny Fires Back on SNL</div>
         <iframe width="100%" style="aspect-ratio: 16/9; border: 2px solid var(--text-main); box-shadow: 10px 10px 0px rgba(0,0,0,0.1);" src="https://www.youtube.com/embed/dvYHhjp1Wcw?si=Dt8l_tVtV_1wpGGx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    </div>
-
-    <div class="timeline">
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-time">T+0:00 — Kickoff</div>
-        <div class="tl-head">Bad Bunny Takes the Field</div>
-        <div class="tl-body">380 performers emerge as sugarcane blades. The broadcast begins.</div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-time">T+3:20 — El Apagón</div>
-        <div class="tl-head">The Electrical Poles Light Up</div>
-        <div class="tl-body">Dancers scale sparking poles. The digital classroom is open.</div>
-      </div>
-
-      <div class="tl-item climax">
-        <div class="tl-dot" style="border-color: var(--gold);"></div>
-        <div class="tl-time" style="color: var(--gold);">T+13:00 — The Spike</div>
-        <div class="tl-head">"Together, We Are America"</div>
-        <div class="tl-body">
-          Bad Bunny spikes the football. The performance becomes a real-time global debate over history, borders, and identity.
-        </div>
-      </div>
     </div>
   </section>
 
@@ -1272,8 +1432,6 @@
 
     if (apagonBg) apagonBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/Electricity%20poles%20sparking.avif')";
     if (hawaiiBg) hawaiiBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/Ricky%20Martin%20and%20Lo%20Que%20Le%20Pas%C3%B3%20a%20Haw%C3%A1i.avif')";
-    
-    // Updated to use the football image for the entire Finale background
     if (finaleBg) finaleBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Together%20we%20are%20america.webp')";
 
     // ── Interactive D3.js Map (Hover Based Blueprint) ──
