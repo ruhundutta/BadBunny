@@ -446,10 +446,10 @@
       font-size: 1.2rem;
       transition: transform 0.3s;
     }
-    .hotspot.active .hotspot-ring {
+    .hotspot:hover .hotspot-ring {
       background: var(--red);
     }
-    .hotspot.active .hotspot-ring::after {
+    .hotspot:hover .hotspot-ring::after {
       content: '×';
       color: white;
       transform: rotate(90deg);
@@ -482,7 +482,7 @@
       border-color: var(--text-main) transparent transparent transparent;
     }
 
-    .hotspot.active .hotspot-tooltip {
+    .hotspot:hover .hotspot-tooltip {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
       pointer-events: auto;
@@ -509,7 +509,7 @@
     .hotspot-right .hotspot-tooltip {
       left: auto; right: -18px; transform: translateX(0) translateY(10px);
     }
-    .hotspot-right.active .hotspot-tooltip {
+    .hotspot-right:hover .hotspot-tooltip {
       transform: translateX(0) translateY(0);
     }
     .hotspot-right .hotspot-tooltip::after {
@@ -683,7 +683,7 @@
     <div class="label" style="margin-bottom: 1rem;">Interactive Production Map</div>
     <h2 style="margin-bottom: 1.5rem; font-size: clamp(2.5rem, 5vw, 4rem);">The Stadium as a Soundstage</h2>
     <p style="color: var(--text-muted); margin-bottom: 3rem; max-width: 60ch; font-size: 1.2rem;">
-      Explore the top-down broadcast architecture utilized by the Funicular Goats team. <strong>Click the nodes</strong> to reveal stage vignettes and specific Sony cinema camera placements.
+      Explore the top-down broadcast architecture utilized by the Funicular Goats team. <strong>Hover over the nodes</strong> to reveal stage vignettes and specific Sony cinema camera placements.
     </p>
     <div id="d3-map-container" style="position: relative; width: 100%; max-width: 1000px; margin: 0 auto; border: 4px solid var(--text-main); box-shadow: 20px 20px 0px rgba(0,0,0,0.05);"></div>
   </section>
@@ -721,7 +721,7 @@
         </div>
       </div>
     </div>
-    <figcaption class="image-caption">Levi's Stadium transformed into a sprawling set. Click the red nodes to explore.</figcaption>
+    <figcaption class="image-caption">Levi's Stadium transformed into a sprawling set. Hover over the red nodes to explore.</figcaption>
   </figure>
 
   <section class="scene" id="scene-prologue">
@@ -824,7 +824,7 @@
         <div class="jersey-text-top">OCASIO</div>
         <div class="jersey-text-num">64</div>
       </div>
-      <p style="text-align:center; margin-top:1.5rem; font-family:var(--font-mono); font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--red); font-weight: 600;">↑ Click the nodes to reveal dual readings</p>
+      <p style="text-align:center; margin-top:1.5rem; font-family:var(--font-mono); font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--red); font-weight: 600;">↑ Hover the nodes to reveal dual readings</p>
     </div>
 
     <!-- Text -->
@@ -883,7 +883,7 @@
              </div>
            </div>
          </figure>
-         <figcaption class="image-caption">La Casita set structure. Click nodes to explore narrative details.</figcaption>
+         <figcaption class="image-caption">La Casita set structure. Hover nodes to explore narrative details.</figcaption>
       </div>
     </div>
 
@@ -1176,33 +1176,7 @@
     if (hawaiiBg) hawaiiBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/Ricky%20Martin%20and%20Lo%20Que%20Le%20Pas%C3%B3%20a%20Haw%C3%A1i.avif')";
     if (finaleBg) finaleBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/bad-bunny-super-bowl-puerto-rico.webp')";
 
-    // ── Click Interactions for Hotspots ──
-    document.querySelectorAll('.hotspot').forEach(hotspot => {
-      hotspot.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isActive = hotspot.classList.contains('active');
-        
-        // Close all other hotspots first
-        document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
-        
-        // Toggle the clicked one
-        if (!isActive) {
-          hotspot.classList.add('active');
-        }
-      });
-    });
-
-    // Close hotspots when clicking outside
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
-      // Close D3 tooltip if active
-      d3.select(".d3-tooltip").style("opacity", 0);
-      d3.selectAll(".stage").attr("fill", "rgba(85, 107, 47, 0.1)").attr("stroke", "#556b2f");
-      d3.selectAll(".camera-group circle").attr("r", d => d.r).attr("stroke", "#d3122e");
-      d3.selectAll(".camera-group line").attr("stroke", "#d3122e");
-    });
-
-    // ── Interactive D3.js Map (Click Based Blueprint) ──
+    // ── Interactive D3.js Map (Hover Based Blueprint) ──
     function renderD3Map() {
         const container = d3.select("#d3-map-container");
         if (container.empty()) return;
@@ -1281,7 +1255,7 @@
             { type: "camera", name: "FR7 PTZ", x: 550, y: 320, r: 8, desc: "Mounted robotic camera tracking high-speed dance choreography." }
         ];
 
-        // Draw Stages (Clickable)
+        // Draw Stages (Hoverable)
         svg.selectAll(".stage")
             .data(mapData.filter(d => d.type === "stage"))
             .enter().append("rect")
@@ -1295,38 +1269,30 @@
             .attr("stroke-width", 2)
             .attr("stroke-dasharray", "4,4")
             .style("cursor", "pointer")
-            .on("click", function(event, d) {
-                event.stopPropagation();
-                
-                // Reset others
-                d3.selectAll(".stage").attr("fill", "rgba(85, 107, 47, 0.1)").attr("stroke", "#556b2f");
-                d3.selectAll(".camera-group circle").attr("r", cam => cam.r).attr("stroke", "#d3122e");
-                d3.selectAll(".camera-group line").attr("stroke", "#d3122e");
-
-                // Highlight this
+            .on("mouseover", function(event, d) {
                 d3.select(this).attr("fill", "rgba(85, 107, 47, 0.3)").attr("stroke", "#111");
                 
                 tooltip.style("opacity", 1)
                     .html(`<strong>${d.name}</strong>${d.desc}`)
                     .style("left", (event.pageX + 15) + "px")
                     .style("top", (event.pageY - 30) + "px");
+            })
+            .on("mousemove", function(event) {
+                tooltip.style("left", (event.pageX + 15) + "px")
+                       .style("top", (event.pageY - 30) + "px");
+            })
+            .on("mouseout", function() {
+                d3.select(this).attr("fill", "rgba(85, 107, 47, 0.1)").attr("stroke", "#556b2f");
+                tooltip.style("opacity", 0);
             });
 
-        // Draw Cameras (Clickable)
+        // Draw Cameras (Hoverable)
         const cams = svg.selectAll(".camera-group")
             .data(mapData.filter(d => d.type === "camera"))
             .enter().append("g")
             .attr("class", "camera-group")
             .style("cursor", "pointer")
-            .on("click", function(event, d) {
-                event.stopPropagation();
-                
-                // Reset others
-                d3.selectAll(".stage").attr("fill", "rgba(85, 107, 47, 0.1)").attr("stroke", "#556b2f");
-                d3.selectAll(".camera-group circle").attr("r", cam => cam.r).attr("stroke", "#d3122e");
-                d3.selectAll(".camera-group line").attr("stroke", "#d3122e");
-
-                // Highlight this
+            .on("mouseover", function(event, d) {
                 d3.select(this).select("circle").attr("r", 12).attr("stroke", "#111");
                 d3.select(this).select("line").attr("stroke", "#111");
 
@@ -1334,6 +1300,15 @@
                     .html(`<strong>${d.name}</strong>${d.desc}`)
                     .style("left", (event.pageX + 15) + "px")
                     .style("top", (event.pageY - 30) + "px");
+            })
+            .on("mousemove", function(event) {
+                tooltip.style("left", (event.pageX + 15) + "px")
+                       .style("top", (event.pageY - 30) + "px");
+            })
+            .on("mouseout", function(event, d) {
+                d3.select(this).select("circle").attr("r", d.r).attr("stroke", "#d3122e");
+                d3.select(this).select("line").attr("stroke", "#d3122e");
+                tooltip.style("opacity", 0);
             });
             
         cams.append("circle")
