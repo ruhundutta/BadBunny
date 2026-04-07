@@ -59,6 +59,22 @@
       overflow-x: hidden;
     }
 
+    /* Global Background Image Texture */
+    .global-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: url('https://raw.githubusercontent.com/ruhundutta/BadBunny/8ad0cb5d0558235d7ce06cb1cac2c76430bb5fc7/bad-bunny-super-bowl-puerto-rico.webp');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.15;
+      mix-blend-mode: overlay;
+      z-index: -1;
+      pointer-events: none;
+    }
+
     /* Scrollbar */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg-color); }
@@ -218,6 +234,18 @@
       justify-content: center;
       overflow: hidden;
       padding: clamp(8rem, 15vw, 12rem) clamp(2rem, 6vw, 5rem) 4rem;
+    }
+    
+    #hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://raw.githubusercontent.com/ruhundutta/BadBunny/6e4e07bf2622d26d869b1ec0e6f58c9f2651eb58/BadBunnyheader.avif');
+      background-size: cover;
+      background-position: center 20%;
+      opacity: 0.4;
+      mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+      z-index: 1;
     }
 
     .byline {
@@ -683,6 +711,9 @@
 </head>
 <body>
 
+  <!-- Global Texture Background -->
+  <div class="global-bg"></div>
+
   <div id="progress-bar"></div>
 
   <nav>
@@ -700,6 +731,7 @@
        HERO & D3 MAP
   ============================================================ -->
   <section id="hero">
+    <div id="hero-bg"></div>
     <div id="hero-content">
       <div class="label">February · 2026 · Levi's Stadium</div>
       <h1>Bad Bunny<br />& the New Media<br />Super Bowl <span class="lx-usa">LX</span></h1>
@@ -779,7 +811,7 @@
     </div>
 
     <div class="sticky-wrap" aria-hidden="true">
-      <div class="sticky-bg" style="background-image:url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/Bad-Bunny-Super-Bowl-header2.webp'); background-position: center 30%;"></div>
+      <div class="sticky-bg" style="background-image:url('https://raw.githubusercontent.com/ruhundutta/BadBunny/6e4e07bf2622d26d869b1ec0e6f58c9f2651eb58/BadBunnyheader.avif'); background-position: center 30%;"></div>
       <div class="sticky-overlay"></div>
     </div>
 
