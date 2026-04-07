@@ -6,10 +6,11 @@
   <title>Bad Bunny & The New Media Super Bowl</title>
   <meta name="description" content="An interactive scrollytelling experience decoding Bad Bunny's 2026 Super Bowl Halftime Show." />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet" />
+  
+  <script src="https://d3js.org/d3.v7.min.js"></script>
 
   <style>
     /* ============================================================
@@ -26,7 +27,8 @@
       --gold:       #c9a84c;
       --text-muted: #8a8070;
 
-      --font-display: 'Bebas Neue', sans-serif;
+      /* Updated to Oswald for better readability and Billboard styling */
+      --font-display: 'Oswald', sans-serif; 
       --font-editorial: 'Playfair Display', Georgia, serif;
       --font-body: 'EB Garamond', Georgia, serif;
       --font-mono: 'IBM Plex Mono', monospace;
@@ -51,7 +53,7 @@
     }
 
     /* Custom cursor */
-    .cursor {
+   .cursor {
       position: fixed;
       width: 12px; height: 12px;
       background: var(--red);
@@ -62,7 +64,7 @@
       transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
       mix-blend-mode: difference;
     }
-    .cursor.hovering { width: 32px; height: 32px; background: var(--azul); }
+   .cursor.hovering { width: 32px; height: 32px; background: var(--azul); }
 
     /* Scrollbar */
     ::-webkit-scrollbar { width: 3px; }
@@ -72,7 +74,7 @@
     /* ============================================================
        TYPOGRAPHY UTILITIES
     ============================================================ */
-    .label {
+   .label {
       font-family: var(--font-mono);
       font-size: 0.7rem;
       font-weight: 600;
@@ -81,7 +83,7 @@
       color: var(--red);
     }
 
-    .chapter-num {
+   .chapter-num {
       font-family: var(--font-display);
       font-size: clamp(6rem, 15vw, 14rem);
       line-height: 0.85;
@@ -92,9 +94,10 @@
     }
 
     h1, h2, h3 {
-      font-family: var(--font-editorial);
+      font-family: var(--font-display); /* Switched headings to Oswald */
       font-weight: 700;
       line-height: 1.1;
+      text-transform: uppercase;
     }
 
     strong { color: var(--gold); font-weight: 600; }
@@ -119,18 +122,18 @@
       mix-blend-mode: difference;
     }
 
-    .nav-brand {
+   .nav-brand {
       font-family: var(--font-display);
       font-size: 1.1rem;
       letter-spacing: 0.15em;
       color: var(--off-white);
     }
 
-    .nav-links {
+   .nav-links {
       display: flex; gap: 2rem;
       list-style: none;
     }
-    .nav-links a {
+   .nav-links a {
       font-family: var(--font-mono);
       font-size: 0.65rem;
       letter-spacing: 0.12em;
@@ -140,7 +143,7 @@
       opacity: 0.6;
       transition: opacity 0.2s;
     }
-    .nav-links a:hover { opacity: 1; color: var(--off-white); }
+   .nav-links a:hover { opacity: 1; color: var(--off-white); }
 
     /* Progress bar */
     #progress-bar {
@@ -200,17 +203,17 @@
       max-width: 900px;
     }
 
-    #hero-content .label { margin-bottom: 1rem; }
+    #hero-content.label { margin-bottom: 1rem; }
 
     #hero-content h1 {
       font-size: clamp(2.8rem, 8vw, 7rem);
-      font-weight: 900;
+      font-weight: 700;
       line-height: 0.95;
       margin-bottom: 1.5rem;
       animation: fadeSlideUp 1.2s 0.3s both ease;
     }
 
-    .hero-sub {
+   .hero-sub {
       font-family: var(--font-body);
       font-size: clamp(1rem, 2vw, 1.3rem);
       font-style: italic;
@@ -220,13 +223,13 @@
       opacity: 0.9;
     }
 
-    .hero-meta {
+   .hero-meta {
       margin-top: 2rem;
       display: flex; gap: 2rem; align-items: center;
       animation: fadeSlideUp 1.2s 0.9s both ease;
     }
 
-    .hero-meta span {
+   .hero-meta span {
       font-family: var(--font-mono);
       font-size: 0.68rem;
       letter-spacing: 0.1em;
@@ -234,26 +237,7 @@
       text-transform: uppercase;
     }
 
-    .watch-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.6rem 1.4rem;
-      background: var(--red);
-      color: var(--off-white);
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      border: none;
-      border-radius: 2px;
-      transition: background 0.2s, transform 0.15s;
-      text-decoration: none;
-    }
-    .watch-btn:hover { background: #a50e25; color: var(--off-white); transform: translateY(-1px); border: none; }
-    .watch-btn svg { width: 14px; height: 14px; }
-
-    .scroll-hint {
+   .scroll-hint {
       position: absolute;
       bottom: 2rem; left: 50%;
       transform: translateX(-50%);
@@ -261,14 +245,14 @@
       display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
       animation: fadeIn 2s 1.5s both;
     }
-    .scroll-hint span {
+   .scroll-hint span {
       font-family: var(--font-mono);
       font-size: 0.6rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--text-muted);
     }
-    .scroll-arrow {
+   .scroll-arrow {
       width: 1px; height: 40px;
       background: linear-gradient(to bottom, var(--text-muted), transparent);
       animation: scrollPulse 2s infinite;
@@ -279,48 +263,70 @@
     }
 
     /* ============================================================
-       INTRO BLOCK
+       D3 STADIUM MAP SECTION
     ============================================================ */
-    #intro {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: clamp(4rem, 10vw, 8rem) 2rem;
-      text-align: center;
+    #stadium-map-section {
+      position: relative;
+      padding: clamp(4rem, 10vw, 8rem) clamp(2rem, 6vw, 5rem);
+      background: var(--near-black);
+      border-top: 1px solid rgba(240,235,225,0.08);
+      border-bottom: 1px solid rgba(240,235,225,0.08);
+    }
+    
+    #stadium-map-section.section-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    #stadium-map-container {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        aspect-ratio: 2/1;
+        position: relative;
     }
 
-    #intro .big-stat {
-      font-family: var(--font-display);
-      font-size: clamp(5rem, 18vw, 16rem);
-      line-height: 0.85;
-      color: transparent;
-      -webkit-text-stroke: 2px var(--red);
-      display: block;
-      margin-bottom: 0.5rem;
+    /* D3 Tooltip */
+   .d3-tooltip {
+      position: absolute;
+      background: rgba(14, 14, 14, 0.95);
+      border: 1px solid var(--azul);
+      color: var(--off-white);
+      padding: 10px 15px;
+      border-radius: 4px;
+      pointer-events: none;
+      font-size: 0.85rem;
+      font-family: var(--font-mono);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      z-index: 10;
     }
 
-    #intro p {
-      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-      font-style: italic;
-      color: var(--cream);
-      max-width: 52ch;
-      margin: 0 auto;
+   .d3-tooltip strong {
+        color: var(--azul-light);
+        display: block;
+        margin-bottom: 5px;
+        font-family: var(--font-display);
+        letter-spacing: 0.05em;
+        font-size: 1.1rem;
     }
 
     /* ============================================================
        SCROLLYTELLING ENGINE
     ============================================================ */
-    .scene {
+   .scene {
       position: relative;
     }
 
-    .sticky-wrap {
+   .sticky-wrap {
       position: sticky;
       top: 0;
       height: 100svh;
       overflow: hidden;
     }
 
-    .sticky-bg {
+   .sticky-bg {
       position: absolute;
       inset: 0;
       background-size: cover;
@@ -328,7 +334,7 @@
       transition: opacity 0.7s ease;
     }
 
-    .sticky-overlay {
+   .sticky-overlay {
       position: absolute;
       inset: 0;
       background: linear-gradient(
@@ -339,16 +345,12 @@
       );
     }
 
-    .sticky-overlay.center-overlay {
-      background: rgba(7,7,7,0.7);
-    }
-
-    .steps-container {
+   .steps-container {
       position: relative;
       z-index: 2;
     }
 
-    .step {
+   .step {
       min-height: 100svh;
       display: flex;
       align-items: center;
@@ -356,26 +358,26 @@
       padding-left: clamp(2rem, 6vw, 5rem);
     }
 
-    .step-inner {
+   .step-inner {
       max-width: var(--step-width);
       opacity: 0;
       transform: translateY(40px);
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
-    .step-inner.visible {
+   .step-inner.visible {
       opacity: 1;
       transform: translateY(0);
     }
 
-    .step-inner .label { margin-bottom: 0.8rem; }
+   .step-inner.label { margin-bottom: 0.8rem; }
 
-    .step-inner h2 {
+   .step-inner h2 {
       font-size: clamp(2rem, 5vw, 3.8rem);
       margin-bottom: 1.2rem;
       color: var(--off-white);
     }
 
-    .step-inner p {
+   .step-inner p {
       font-size: clamp(0.95rem, 1.6vw, 1.15rem);
       color: rgba(240,235,225,0.85);
       max-width: 50ch;
@@ -384,7 +386,7 @@
     /* ============================================================
        CHAPTER DIVIDERS
     ============================================================ */
-    .chapter-break {
+   .chapter-break {
       display: flex;
       align-items: center;
       gap: 1.5rem;
@@ -392,709 +394,32 @@
       overflow: hidden;
     }
 
-    .chapter-break .chapter-num { flex-shrink: 0; }
-    .chapter-break .break-line {
+   .chapter-break.chapter-num { flex-shrink: 0; }
+   .chapter-break.break-line {
       flex: 1;
       height: 1px;
       background: linear-gradient(to right, rgba(200,16,46,0.8), transparent);
     }
 
     /* ============================================================
-       SPECIFIC SCENES
+       SCENE: EL APAGÓN
     ============================================================ */
-
-    /* Scene: El Apagón — flicker animation */
-    #scene-apagon .sticky-bg {
+    #scene-apagon.sticky-bg {
       background-image: url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/Electricity%20poles%20sparking.avif');
       background-position: center right;
     }
-    #scene-apagon .sticky-overlay {
+    #scene-apagon.sticky-overlay {
       background: linear-gradient(to right, rgba(7,7,7,0.97) 0%, rgba(7,7,7,0.65) 50%, rgba(7,7,7,0.2) 100%);
     }
-    .flicker {
+   .flicker {
       animation: flickerAnim 0s linear infinite;
     }
-    .flicker.active {
+   .flicker.active {
       animation-duration: 8s;
     }
     @keyframes flickerAnim {
       0%,91%,93%,95%,97%,99%,100% { opacity: 1; }
       92%,94%,96%,98% { opacity: 0; }
-    }
-
-    /* Apagón text glow */
-    .blackout-word {
-      color: var(--azul-light);
-      text-shadow: 0 0 20px rgba(63,136,197,0.6), 0 0 40px rgba(63,136,197,0.3);
-    }
-
-    /* ============================================================
-       JERSEY HOTSPOT SECTION
-    ============================================================ */
-    #jersey-section {
-      padding: clamp(4rem, 10vw, 8rem) clamp(2rem, 6vw, 5rem);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    @media (max-width: 768px) {
-      #jersey-section { grid-template-columns: 1fr; }
-    }
-
-    .jersey-visual {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* SVG jersey representation */
-    .jersey-diagram {
-      position: relative;
-      width: 100%;
-      max-width: 360px;
-      margin: 0 auto;
-    }
-
-    .jersey-svg-wrap {
-      width: 100%;
-      aspect-ratio: 3/4;
-      background: linear-gradient(135deg, #c8b89a 0%, #e8d9c0 50%, #c8b89a 100%);
-      border-radius: 8px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-      overflow: hidden;
-    }
-
-    .jersey-svg-wrap::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        45deg,
-        rgba(0,0,0,0.02) 0px,
-        rgba(0,0,0,0.02) 1px,
-        transparent 1px,
-        transparent 4px
-      );
-    }
-
-    .jersey-text-top {
-      font-family: var(--font-display);
-      font-size: clamp(2.5rem, 8vw, 4rem);
-      letter-spacing: 0.08em;
-      color: #1a1a1a;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    .jersey-text-num {
-      font-family: var(--font-display);
-      font-size: clamp(5rem, 18vw, 9rem);
-      line-height: 0.9;
-      color: #1a1a1a;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hotspot {
-      position: absolute;
-      cursor: pointer;
-      z-index: 5;
-    }
-
-    .hotspot-ring {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      border: 2px solid var(--red);
-      background: rgba(200,16,46,0.2);
-      display: flex; align-items: center; justify-content: center;
-      animation: hotspotPulse 2.5s infinite;
-      transition: background 0.2s;
-    }
-    .hotspot:hover .hotspot-ring {
-      background: rgba(200,16,46,0.6);
-    }
-    @keyframes hotspotPulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(200,16,46,0.4); }
-      50% { box-shadow: 0 0 0 8px rgba(200,16,46,0); }
-    }
-
-    .hotspot-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--red);
-    }
-
-    .hotspot-tooltip {
-      position: absolute;
-      bottom: calc(100% + 12px);
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--near-black);
-      border: 1px solid var(--red);
-      border-radius: 4px;
-      padding: 1rem 1.2rem;
-      width: 220px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s, transform 0.25s;
-      transform: translateX(-50%) translateY(8px);
-    }
-    .hotspot:hover .hotspot-tooltip,
-    .hotspot:focus .hotspot-tooltip {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .hotspot-tooltip .tt-label {
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      color: var(--red);
-      text-transform: uppercase;
-      margin-bottom: 0.4rem;
-    }
-    .hotspot-tooltip p {
-      font-family: var(--font-body);
-      font-size: 0.82rem;
-      color: var(--cream);
-      line-height: 1.5;
-    }
-
-    /* Hotspot 1 — Ocasio name */
-    .hotspot-ocasio {
-      top: 28%;
-      left: 50%;
-      transform: translateX(-60%);
-    }
-    /* Hotspot 2 — 64 number */
-    .hotspot-64 {
-      bottom: 20%;
-      left: 50%;
-      transform: translateX(-30%);
-    }
-    /* Fix tooltip overflow for right-side hotspot */
-    .hotspot-64 .hotspot-tooltip {
-      left: auto;
-      right: 0;
-      transform: translateX(0) translateY(8px);
-    }
-    .hotspot-64:hover .hotspot-tooltip,
-    .hotspot-64:focus .hotspot-tooltip {
-      transform: translateX(0) translateY(0);
-    }
-
-    .jersey-text {
-      max-width: 50ch;
-    }
-
-    /* ============================================================
-       EMBED BLOCKS
-    ============================================================ */
-    .embed-section {
-      padding: 4rem clamp(2rem, 6vw, 5rem);
-    }
-
-    .embed-section .label { margin-bottom: 1.5rem; }
-
-    .embeds-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      align-items: start;
-    }
-
-    .embed-card {
-      background: var(--near-black);
-      border: 1px solid rgba(240,235,225,0.08);
-      border-radius: 6px;
-      overflow: hidden;
-      transition: border-color 0.3s;
-    }
-    .embed-card:hover { border-color: rgba(240,235,225,0.2); }
-
-    .embed-caption {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      padding: 0.7rem 1rem;
-      border-top: 1px solid rgba(240,235,225,0.06);
-    }
-
-    .twitter-wrap {
-      padding: 1rem;
-      min-height: 200px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-
-    /* Override twitter embed dark mode */
-    .twitter-wrap twitterwidget { max-width: 100% !important; }
-
-    .ig-wrap {
-      padding: 1rem;
-      min-height: 200px;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden;
-    }
-
-    .ig-wrap .instagram-media {
-      min-width: unset !important;
-      width: 100% !important;
-      max-width: 100% !important;
-    }
-
-    /* ============================================================
-       SCENE: CASITA
-    ============================================================ */
-    #scene-casita {
-      background: var(--near-black);
-      padding: clamp(4rem, 10vw, 8rem) clamp(2rem, 6vw, 5rem);
-    }
-
-    .casita-header {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-      margin-bottom: 4rem;
-    }
-
-    @media (max-width: 768px) {
-      .casita-header { grid-template-columns: 1fr; }
-    }
-
-    .casita-diagram {
-      position: relative;
-      aspect-ratio: 4/3;
-      background: linear-gradient(135deg, #e8928c 0%, #f0a8a2 40%, #d4756e 100%);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 30px 70px rgba(0,0,0,0.5);
-    }
-
-    .casita-house {
-      position: absolute;
-      inset: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-
-    .casita-roof {
-      width: 0;
-      height: 0;
-      border-left: 80px solid transparent;
-      border-right: 80px solid transparent;
-      border-bottom: 60px solid rgba(0,0,0,0.2);
-      margin-bottom: -4px;
-    }
-
-    .casita-body {
-      width: 160px;
-      height: 100px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 4px;
-      position: relative;
-      display: flex; align-items: flex-end; justify-content: center;
-      padding-bottom: 8px;
-    }
-
-    .casita-label {
-      font-family: var(--font-display);
-      font-size: 1.4rem;
-      letter-spacing: 0.15em;
-      color: rgba(255,255,255,0.9);
-    }
-
-    .casita-location {
-      position: absolute;
-      bottom: 1rem;
-      left: 0; right: 0;
-      text-align: center;
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.7);
-    }
-
-    .guests-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 1rem;
-      margin-top: 3rem;
-    }
-
-    .guest-card {
-      background: rgba(240,235,225,0.04);
-      border: 1px solid rgba(240,235,225,0.08);
-      border-radius: 6px;
-      padding: 1rem;
-      text-align: center;
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s, transform 0.2s;
-    }
-    .guest-card:hover {
-      background: rgba(200,16,46,0.1);
-      border-color: rgba(200,16,46,0.4);
-      transform: translateY(-2px);
-    }
-
-    .guest-icon { font-size: 2rem; margin-bottom: 0.4rem; }
-    .guest-name {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--cream);
-    }
-    .guest-role {
-      font-family: var(--font-body);
-      font-size: 0.75rem;
-      font-style: italic;
-      color: var(--text-muted);
-      margin-top: 0.2rem;
-    }
-
-    .guest-detail {
-      display: none;
-      font-size: 0.78rem;
-      color: var(--cream);
-      margin-top: 0.5rem;
-      font-style: italic;
-      line-height: 1.4;
-    }
-    .guest-card.open .guest-detail { display: block; }
-    .guest-card.open { background: rgba(200,16,46,0.15); border-color: rgba(200,16,46,0.5); }
-
-    /* ============================================================
-       SCENE: RICKY MARTIN / HAWÁI
-    ============================================================ */
-    #scene-hawaii {
-      position: relative;
-    }
-
-    #scene-hawaii .sticky-bg {
-      background-image: url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/Ricky%20Martin%20and%20Lo%20Que%20Le%20Pas%C3%B3%20a%20Haw%C3%A1i.avif');
-      background-position: center;
-    }
-
-    #scene-hawaii .sticky-overlay {
-      background: linear-gradient(to right, rgba(7,7,7,0.97) 0%, rgba(7,7,7,0.7) 50%, rgba(7,7,7,0.25) 100%);
-    }
-
-    /* Lyrics hover */
-    .lyrics-block {
-      margin: 1.5rem 0;
-      padding: 1.2rem 1.5rem;
-      border-left: 3px solid var(--azul);
-      background: rgba(63,136,197,0.08);
-      cursor: crosshair;
-    }
-
-    .lyrics-es {
-      font-family: var(--font-body);
-      font-style: italic;
-      font-size: 1rem;
-      color: var(--cream);
-      transition: opacity 0.3s;
-    }
-
-    .lyrics-en {
-      font-family: var(--font-body);
-      font-size: 0.9rem;
-      color: var(--azul-light);
-      margin-top: 0.5rem;
-      opacity: 0;
-      height: 0;
-      overflow: hidden;
-      transition: opacity 0.4s, height 0.4s;
-    }
-
-    .lyrics-block:hover .lyrics-en,
-    .lyrics-block.reveal .lyrics-en {
-      opacity: 1;
-      height: auto;
-    }
-
-    .lyrics-hint {
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      color: var(--azul);
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-      opacity: 0.7;
-    }
-
-    /* ============================================================
-       SCENE: FLAG
-    ============================================================ */
-    #flag-section {
-      padding: clamp(5rem, 12vw, 10rem) clamp(2rem, 6vw, 5rem);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    @media (max-width: 768px) {
-      #flag-section { grid-template-columns: 1fr; }
-    }
-
-    .flag-visual {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-
-    .flag-compare {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .flag-item {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-
-    .flag-svg-wrap {
-      flex-shrink: 0;
-      width: 120px;
-      height: 72px;
-      border-radius: 3px;
-      overflow: hidden;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-      transition: box-shadow 0.3s, transform 0.3s;
-    }
-    .flag-svg-wrap:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.7); transform: scale(1.04); }
-
-    .flag-svg-wrap svg { width: 100%; height: 100%; }
-
-    .flag-meta { flex: 1; }
-    .flag-meta .flag-year {
-      font-family: var(--font-display);
-      font-size: 2.5rem;
-      line-height: 1;
-      color: transparent;
-      -webkit-text-stroke: 1px rgba(240,235,225,0.3);
-    }
-    .flag-meta p {
-      font-family: var(--font-body);
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
-    .flag-text { max-width: 50ch; }
-
-    /* ============================================================
-       SCENE: EPILOGUE — TIMELINE
-    ============================================================ */
-    #epilogue {
-      padding: clamp(4rem, 10vw, 8rem) clamp(2rem, 6vw, 5rem);
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    #epilogue h2 {
-      font-size: clamp(2.5rem, 6vw, 5rem);
-      margin-bottom: 1rem;
-      color: var(--off-white);
-    }
-
-    #epilogue > p {
-      font-size: clamp(1rem, 1.8vw, 1.2rem);
-      color: rgba(240,235,225,0.8);
-      max-width: 55ch;
-      margin-bottom: 4rem;
-    }
-
-    /* Timeline */
-    .timeline {
-      position: relative;
-      padding-left: 2rem;
-    }
-
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0; bottom: 0;
-      width: 1px;
-      background: linear-gradient(to bottom, var(--red), var(--azul), transparent);
-    }
-
-    .tl-item {
-      position: relative;
-      padding-bottom: 3rem;
-      padding-left: 2rem;
-      opacity: 0;
-      transform: translateX(-20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .tl-item.visible { opacity: 1; transform: translateX(0); }
-
-    .tl-dot {
-      position: absolute;
-      left: -2.3rem;
-      top: 0.3rem;
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      background: var(--red);
-      border: 2px solid var(--black);
-      box-shadow: 0 0 0 3px rgba(200,16,46,0.3);
-    }
-    .tl-item:nth-child(2n) .tl-dot { background: var(--azul); box-shadow: 0 0 0 3px rgba(63,136,197,0.3); }
-    .tl-item.climax .tl-dot {
-      width: 18px; height: 18px;
-      left: -2.6rem; top: 0;
-      background: var(--gold);
-      box-shadow: 0 0 0 4px rgba(201,168,76,0.4), 0 0 20px rgba(201,168,76,0.4);
-      animation: goldPulse 2s infinite;
-    }
-    @keyframes goldPulse {
-      0%, 100% { box-shadow: 0 0 0 4px rgba(201,168,76,0.4), 0 0 20px rgba(201,168,76,0.3); }
-      50% { box-shadow: 0 0 0 8px rgba(201,168,76,0), 0 0 40px rgba(201,168,76,0.2); }
-    }
-
-    .tl-time {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      color: var(--red);
-      text-transform: uppercase;
-      margin-bottom: 0.3rem;
-    }
-    .tl-item:nth-child(2n) .tl-time { color: var(--azul-light); }
-    .tl-item.climax .tl-time { color: var(--gold); }
-
-    .tl-head {
-      font-family: var(--font-editorial);
-      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      color: var(--off-white);
-    }
-
-    .tl-body {
-      font-size: clamp(0.9rem, 1.5vw, 1rem);
-      color: rgba(240,235,225,0.7);
-      max-width: 48ch;
-    }
-
-    .trump-card {
-      margin-top: 1rem;
-      padding: 1rem 1.2rem;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(240,235,225,0.1);
-      border-radius: 4px;
-      border-left: 3px solid var(--gold);
-    }
-    .trump-card .tc-from {
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.4rem;
-    }
-    .trump-card p {
-      font-size: 0.88rem;
-      font-style: italic;
-      color: var(--cream);
-      max-width: 44ch;
-    }
-
-    /* ============================================================
-       FINALE VISUAL
-    ============================================================ */
-    #finale {
-      position: relative;
-      overflow: hidden;
-    }
-
-    #finale .sticky-bg {
-      background-image: url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/bad-bunny-super-bowl-puerto-rico.webp');
-      background-position: center;
-    }
-    #finale .sticky-overlay {
-      background: linear-gradient(to right, rgba(7,7,7,0.96) 0%, rgba(7,7,7,0.6) 50%, rgba(7,7,7,0.15) 100%);
-    }
-
-    /* ============================================================
-       FOOTER
-    ============================================================ */
-    footer {
-      padding: 5rem clamp(2rem, 6vw, 5rem);
-      border-top: 1px solid rgba(240,235,225,0.08);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-    }
-
-    @media (max-width: 600px) { footer { grid-template-columns: 1fr; } }
-
-    .footer-brand {
-      font-family: var(--font-display);
-      font-size: 2.5rem;
-      letter-spacing: 0.05em;
-      line-height: 1;
-      color: var(--off-white);
-      margin-bottom: 1rem;
-    }
-
-    .footer-sub {
-      font-family: var(--font-body);
-      font-style: italic;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .footer-links {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      align-items: flex-end;
-    }
-
-    .footer-links li {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    .footer-links a {
-      color: var(--text-muted);
-      border: none;
-      transition: color 0.2s;
-    }
-    .footer-links a:hover { color: var(--off-white); }
-
-    .footer-copy {
-      grid-column: 1 / -1;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(240,235,225,0.06);
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-      color: rgba(138,128,112,0.5);
-      text-transform: uppercase;
     }
 
     /* ============================================================
@@ -1103,128 +428,30 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-    .fade-in {
+   .fade-in {
       opacity: 0;
       transform: translateY(30px);
       transition: opacity 0.8s ease, transform 0.8s ease;
     }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
+   .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-    /* ============================================================
-       PULL QUOTE
-    ============================================================ */
-    .pull-quote {
-      margin: 5rem auto;
-      max-width: 700px;
-      padding: 0 clamp(2rem, 6vw, 5rem);
-      text-align: center;
-    }
-
-    .pull-quote blockquote {
-      font-family: var(--font-editorial);
-      font-style: italic;
-      font-size: clamp(1.4rem, 3.5vw, 2.4rem);
-      line-height: 1.3;
-      color: var(--cream);
-      position: relative;
-    }
-
-    .pull-quote blockquote::before {
-      content: '"';
-      font-size: 8rem;
-      line-height: 0;
-      position: absolute;
-      top: 2rem;
-      left: -3rem;
-      color: rgba(200,16,46,0.2);
-      font-family: var(--font-editorial);
-    }
-
-    .pull-quote cite {
-      display: block;
-      margin-top: 1.2rem;
-      font-family: var(--font-mono);
-      font-style: normal;
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    /* ============================================================
-       STAT CALLOUTS
-    ============================================================ */
-    .stat-row {
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      margin: 2rem 0;
-    }
-
-    .stat-block {
-      flex: 1;
-      min-width: 130px;
-      padding: 1.2rem;
-      border-top: 2px solid var(--red);
-      background: rgba(200,16,46,0.05);
-    }
-
-    .stat-block:nth-child(2) { border-color: var(--azul); background: rgba(63,136,197,0.05); }
-    .stat-block:nth-child(3) { border-color: var(--gold); background: rgba(201,168,76,0.05); }
-
-    .stat-num {
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 6vw, 3.5rem);
-      line-height: 1;
-      margin-bottom: 0.3rem;
-    }
-
-    .stat-block:nth-child(1) .stat-num { color: var(--red); }
-    .stat-block:nth-child(2) .stat-num { color: var(--azul-light); }
-    .stat-block:nth-child(3) .stat-num { color: var(--gold); }
-
-    .stat-desc {
-      font-family: var(--font-mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    /* ============================================================
-       RESPONSIVE
-    ============================================================ */
-    @media (max-width: 600px) {
-      nav .nav-links { display: none; }
-      .sticky-overlay {
-        background: rgba(7,7,7,0.8) !important;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <!-- Custom cursor -->
   <div class="cursor" id="cursor"></div>
 
-  <!-- Progress bar -->
   <div id="progress-bar"></div>
 
-  <!-- Navigation -->
   <nav>
     <div class="nav-brand">BAD BUNNY × SUPER BOWL</div>
     <ul class="nav-links">
+      <li><a href="#stadium-map-section">The Setup</a></li>
       <li><a href="#scene-apagon">El Apagón</a></li>
-      <li><a href="#jersey-section">La Jersey</a></li>
-      <li><a href="#scene-casita">La Casita</a></li>
-      <li><a href="#scene-hawaii">Hawái</a></li>
       <li><a href="#epilogue">Epilogue</a></li>
     </ul>
   </nav>
 
-  <!-- ============================================================
-       HERO
-  ============================================================ -->
   <section id="hero">
     <div id="hero-bg" aria-hidden="true"></div>
     <div id="hero-overlay" aria-hidden="true"></div>
@@ -1239,10 +466,6 @@
         <span>13-minute performance</span>
         <span>175 cameras</span>
         <span>380 performers</span>
-        <a href="https://www.youtube.com/watch?v=G6FuWd4wNd8" target="_blank" class="watch-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-          Watch Full Show
-        </a>
       </div>
     </div>
     <div class="scroll-hint" aria-hidden="true">
@@ -1251,21 +474,19 @@
     </div>
   </section>
 
-  <!-- ============================================================
-       INTRO STATS
-  ============================================================ -->
-  <section id="intro">
-    <span class="big-stat">128M</span>
-    <p>
-      While 68,000 sat inside Levi's Stadium, the real audience was everywhere else —
-      watching through 175 Sony cinema cameras that turned a football field into
-      a slice of Puerto Rico coded purely for the lens.
-    </p>
+  <section id="stadium-map-section" class="fade-in">
+    <div class="section-header">
+        <div class="label">Interactive Blueprint</div>
+        <h2>The 175-Camera Illusion</h2>
+        <p style="max-width: 60ch; margin: 0 auto; color: var(--cream);">
+            The field was divided into distinct "vignettes" to tell stories of Puerto Rican life, captured by Funicular Goats utilizing highly specialized cinema cameras to create a living music video. Hover over the nodes below to explore the stage setup and camera plots.
+        </p>
+    </div>
+    
+    <div id="stadium-map-container"></div>
+    <div id="d3-tooltip" class="d3-tooltip"></div>
   </section>
 
-  <!-- ============================================================
-       PROLOGUE — THE 175-CAMERA ILLUSION
-  ============================================================ -->
   <section class="scene" id="scene-prologue">
     <div class="chapter-break fade-in">
       <span class="chapter-num" aria-hidden="true">00</span>
@@ -1281,30 +502,15 @@
     <div class="steps-container" style="margin-top:-100svh;">
       <div class="step">
         <div class="step-inner">
-          <div class="label">The 175-Camera Illusion</div>
+          <div class="label">The Production Setup</div>
           <h2>Designing for the Lens</h2>
           <p>
             The stadium was a soundstage. Every angle, every prop, every human body
             was positioned not for the 68,000 in the stands — but for the 128 million
             at home watching through the lens of a Sony VENICE 2 or BURANO cinema camera.
           </p>
-          <div class="stat-row" style="margin-top:1.5rem;">
-            <div class="stat-block">
-              <div class="stat-num">175</div>
-              <div class="stat-desc">Sony cinema cameras deployed</div>
-            </div>
-            <div class="stat-block">
-              <div class="stat-num">380</div>
-              <div class="stat-desc">performers as sugarcane blades</div>
-            </div>
-            <div class="stat-block">
-              <div class="stat-num">25</div>
-              <div class="stat-desc">max motorised props (NFL rule)</div>
-            </div>
-          </div>
         </div>
       </div>
-
       <div class="step">
         <div class="step-inner">
           <div class="label">Creative Direction</div>
@@ -1312,643 +518,15 @@
           <p>
             Creative director <strong>Harriet Cuddeford</strong> and <strong>Yellow Studio</strong>
             faced the NFL's hard cap: no more than 25 motorized carts or large props on the field.
-            Their solution? 380 human beings, each costumed as a blade of sugarcane — representing
-            Puerto Rico's main cash crop under early U.S. territorial rule — who could rapidly walk off
+            Their solution? 380 human beings, each costumed as a blade of sugarcane—representing
+            Puerto Rico's main cash crop under early U.S. territorial rule—who could rapidly walk off
             the field without a single machine.
           </p>
-          <p style="margin-top:1em;">
-            The lush pastoral fields that millions saw at home? Pure human choreography.
-            The live crowd saw something entirely different.
-          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Intro Twitter embed — starting of performance -->
-  <div class="embed-section">
-    <div class="label">See it for yourself</div>
-    <div class="embeds-grid" style="max-width:560px;">
-      <div class="embed-card">
-        <div class="twitter-wrap">
-          <blockquote class="twitter-tweet" data-theme="dark">
-            <a href="https://twitter.com/maoBarraza/status/2020675644762501495"></a>
-          </blockquote>
-        </div>
-        <div class="embed-caption">The opening moments — Bad Bunny takes the field</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       CHAPTER 1 — EL APAGÓN
-  ============================================================ -->
-  <section class="scene" id="scene-apagon">
-    <div class="chapter-break fade-in">
-      <span class="chapter-num" aria-hidden="true">01</span>
-      <div class="break-line"></div>
-      <span class="label">Chapter One</span>
-    </div>
-
-    <div class="sticky-wrap">
-      <div class="sticky-bg" id="apagon-bg"></div>
-      <div class="sticky-overlay"></div>
-    </div>
-
-    <div class="steps-container" style="margin-top:-100svh;">
-      <div class="step">
-        <div class="step-inner">
-          <div class="label">El Apagón · The Blackout</div>
-          <h2>The Digital Classroom</h2>
-          <p>
-            When the lights flickered on those sparking electrical poles, art became a
-            <span class="blackout-word">digital classroom</span>. Bad Bunny and his dancers —
-            dressed as <em>jíbaros</em> (traditional Puerto Rican rural farmers) in
-            <em>pavas</em>, brimmed straw hats woven from palm leaves — scaled the poles
-            before an audience of 128 million people.
-          </p>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-inner">
-          <div class="label">Infrastructure & Aftermath</div>
-          <h2>A Searing Critique</h2>
-          <p>
-            The tableau was a direct confrontation with Puerto Rico's chronic power failures —
-            the unreliable grid that predated Hurricane Maria, and the catastrophic blackouts
-            that followed the 2017 storm's landfall.
-          </p>
-          <p>
-            By embedding this critique inside the most-watched pop spectacle on the planet,
-            Bad Bunny bypassed every traditional media gatekeeper and transmitted a political
-            indictment to living rooms across the globe.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Apagón + dwerking embed -->
-  <div class="embed-section">
-    <div class="label">The moment that broke the internet</div>
-    <div class="embeds-grid" style="max-width:560px;">
-      <div class="embed-card">
-        <div class="twitter-wrap">
-          <blockquote class="twitter-tweet" data-theme="dark">
-            <a href="https://twitter.com/MENin4K/status/2020681501969641595"></a>
-          </blockquote>
-        </div>
-        <div class="embed-caption">Bad Bunny recreates the viral 'dwerking' meme — live, on the Super Bowl stage</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       CHAPTER 2 — THE JERSEY
-  ============================================================ -->
-  <section id="jersey-section" class="fade-in">
-    <div class="chapter-break" style="padding-bottom:3rem;">
-      <span class="chapter-num" aria-hidden="true">02</span>
-      <div class="break-line"></div>
-      <span class="label">Chapter Two</span>
-    </div>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; padding: 0 clamp(2rem,6vw,5rem) clamp(4rem,8vw,7rem);" class="jersey-grid">
-
-      <!-- Visual -->
-      <div class="jersey-visual">
-        <div class="jersey-diagram">
-          <div class="jersey-svg-wrap">
-            <!-- hotspot: Ocasio -->
-            <div class="hotspot hotspot-ocasio" tabindex="0" role="button" aria-label="Ocasio – hover for meaning">
-              <div class="hotspot-ring"><div class="hotspot-dot"></div></div>
-              <div class="hotspot-tooltip" role="tooltip">
-                <div class="tt-label">Reading 1 — Family</div>
-                <p><em>Ocasio</em> is Bad Bunny's maternal surname. A personal tribute stitched into the biggest stage on earth.</p>
-              </div>
-            </div>
-            <!-- hotspot: 64 -->
-            <div class="hotspot hotspot-64" tabindex="0" role="button" aria-label="64 – hover for meaning">
-              <div class="hotspot-ring"><div class="hotspot-dot"></div></div>
-              <div class="hotspot-tooltip" role="tooltip">
-                <div class="tt-label">Reading 2 — Political</div>
-                <p><em>64</em> was the government's initial, heavily disputed Hurricane Maria death toll — the number that triggered mass protests across Puerto Rico.</p>
-              </div>
-            </div>
-            <div class="jersey-text-top">OCASIO</div>
-            <div class="jersey-text-num">64</div>
-          </div>
-          <p style="text-align:center; margin-top:0.8rem; font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted);">↑ Hover the dots to reveal dual readings</p>
-        </div>
-      </div>
-
-      <!-- Text -->
-      <div class="jersey-text">
-        <div class="label">Chapter Two — The Jersey</div>
-        <h2 style="font-size:clamp(2rem,5vw,3.5rem); margin:0.8rem 0 1.2rem;">The "Ocasio 64" Ambiguity</h2>
-        <p>
-          Bad Bunny took the field wearing a custom cream Zara jersey reading <strong>OCASIO 64</strong>.
-          In the new media ecosystem, a single garment transmitted two simultaneous messages to
-          two different audiences — at exactly the same time.
-        </p>
-        <p>
-          To the family network: a tribute to his late uncle <em>Cutito</em>, born in 1964,
-          a devoted 49ers fan who never got to see his nephew on this stage.
-        </p>
-        <p>
-          To the political network: a stark reminder that the Puerto Rican government
-          initially reported only <strong>64 deaths</strong> from Hurricane Maria —
-          a figure that independent researchers would later revise to over 3,000.
-          The disputed number sparked nationwide protests where shoes were placed outside
-          government buildings.
-        </p>
-        <p style="margin-top:1.5rem; padding:1rem 1.2rem; border-left: 3px solid var(--gold); background: rgba(201,168,76,0.06); font-style:italic; font-size:0.95rem; color:var(--cream);">
-          "In the new media reality, the network debated both — simultaneously,
-          and without resolution."
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       CHAPTER 3 — LA CASITA & THE DIASPORA
-  ============================================================ -->
-  <section id="scene-casita" class="fade-in">
-    <div class="chapter-break">
-      <span class="chapter-num" aria-hidden="true">03</span>
-      <div class="break-line"></div>
-      <span class="label">Chapter Three</span>
-    </div>
-
-    <div style="padding: 2rem clamp(2rem,6vw,5rem) clamp(4rem,8vw,7rem);">
-      <div class="casita-header">
-        <div>
-          <div class="label">La Casita · The Diaspora</div>
-          <h2 style="font-size:clamp(2.2rem,5vw,4rem); margin: 0.8rem 0 1.2rem;">The Field Became a Narrative Landscape</h2>
-          <p>
-            The emotional centre of the stage was <strong>La Casita</strong> — a
-            salmon-pink house modelled after a real home in <em>Humacao, Puerto Rico</em>.
-            It was a direct nod to the <em>pari de marquesina</em>: the informal house parties
-            that are a cornerstone of Puerto Rican social life.
-          </p>
-          <p>
-            Alongside it stood a Nuyorican barber shop, and behind the bar stood
-            <strong>María Antonia "Toñita" Cay</strong> — the legendary owner of a Caribbean
-            social club in Williamsburg, Brooklyn — pouring Bad Bunny a shot. The gesture
-            collapsed the distance between the island and its New York diaspora into a
-            single, wordless image.
-          </p>
-        </div>
-
-        <div class="casita-diagram" role="img" aria-label="Illustration of La Casita stage set">
-          <div class="casita-house">
-            <div class="casita-roof"></div>
-            <div class="casita-body">
-              <div class="casita-label">LA CASITA</div>
-            </div>
-            <div class="casita-location">Modelled after Humacao, Puerto Rico</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Instagram embed — Bad Bunny with boxers -->
-      <div style="margin-bottom:3rem;">
-        <div class="label" style="margin-bottom:1rem;">From the field — Bad Bunny with the boxers</div>
-        <div style="max-width:480px;">
-          <div class="embed-card">
-            <div class="ig-wrap">
-              <blockquote
-                class="instagram-media"
-                data-instgrm-permalink="https://www.instagram.com/p/DUhYpAPEWsk/"
-                data-instgrm-version="14"
-                style="background:#FFF;border:0;border-radius:3px;margin:1px;max-width:100%;min-width:326px;padding:0;width:99.375%;">
-                <div style="padding:16px;">
-                  <a href="https://www.instagram.com/p/DUhYpAPEWsk/" target="_blank" style="background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%;">
-                    <p style="color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap;">
-                      View this post on Instagram
-                    </p>
-                  </a>
-                </div>
-              </blockquote>
-            </div>
-            <div class="embed-caption">Bad Bunny with the boxers — inside La Casita</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Guest network -->
-      <div class="label" style="margin-bottom:1rem;">The guest network — click to explore</div>
-      <div class="guests-grid">
-        <div class="guest-card" onclick="this.classList.toggle('open')">
-          <div class="guest-icon">🎭</div>
-          <div class="guest-name">Pedro Pascal</div>
-          <div class="guest-role">Actor</div>
-          <div class="guest-detail">The Chilean-American star, beloved for <em>The Last of Us</em> and <em>The Mandalorian</em>, brought pan-Latino representation to the Casita.</div>
-        </div>
-        <div class="guest-card" onclick="this.classList.toggle('open')">
-          <div class="guest-icon">🎤</div>
-          <div class="guest-name">Lady Gaga</div>
-          <div class="guest-role">Artist</div>
-          <div class="guest-detail">Her appearance amplified the global reach of the performance beyond the Latino community, bringing crossover attention from her massive fanbase.</div>
-        </div>
-        <div class="guest-card" onclick="this.classList.toggle('open')">
-          <div class="guest-icon">💎</div>
-          <div class="guest-name">Cardi B</div>
-          <div class="guest-role">Rapper</div>
-          <div class="guest-detail">Cardi — born Belcalis Almánzar in the Bronx to Dominican and Trinidadian parents — embodied the Nuyorican spirit of the performance.</div>
-        </div>
-        <div class="guest-card" onclick="this.classList.toggle('open')">
-          <div class="guest-icon">🌟</div>
-          <div class="guest-name">Jessica Alba</div>
-          <div class="guest-role">Actress / Entrepreneur</div>
-          <div class="guest-detail">Her presence underscored the broader Latina diaspora — connecting the Puerto Rican narrative to the wider hemispheric story.</div>
-        </div>
-        <div class="guest-card" onclick="this.classList.toggle('open')">
-          <div class="guest-icon">🥃</div>
-          <div class="guest-name">Toñita Cay</div>
-          <div class="guest-role">Brooklyn, New York</div>
-          <div class="guest-detail">The owner of a beloved Caribbean social club in Williamsburg, Brooklyn — pouring Bad Bunny a shot, symbolising the unbreakable bond between the island and its diaspora.</div>
-        </div>
-        <div class="guest-card" onclick="this.classList.toggle('open')">
-          <div class="guest-icon">🎵</div>
-          <div class="guest-name">Ricky Martin</div>
-          <div class="guest-role">Icon</div>
-          <div class="guest-detail">Rather than <em>Livin' la Vida Loca</em>, Martin delivered a far more pointed political message — see Chapter 4.</div>
-        </div>
-      </div>
-
-      <!-- Instagram reel — celebs in La Casita -->
-      <div style="margin-top:3rem;">
-        <div class="label" style="margin-bottom:1rem;">Celebrities inside La Casita</div>
-        <div style="max-width:480px;">
-          <div class="embed-card">
-            <div class="ig-wrap">
-              <blockquote
-                class="instagram-media"
-                data-instgrm-permalink="https://www.instagram.com/reel/DUhXGz5jxHW/"
-                data-instgrm-version="14"
-                style="background:#FFF;border:0;border-radius:3px;margin:1px;max-width:100%;min-width:326px;padding:0;width:99.375%;">
-                <div style="padding:16px;">
-                  <a href="https://www.instagram.com/reel/DUhXGz5jxHW/" target="_blank" style="background:#FFFFFF;line-height:0;padding:0 0;text-align:center;text-decoration:none;width:100%;">
-                    <p style="color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap;">
-                      View this post on Instagram
-                    </p>
-                  </a>
-                </div>
-              </blockquote>
-            </div>
-            <div class="embed-caption">Celebrities gather inside La Casita during the performance</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       CHAPTER 4 — LO QUE LE PASÓ A HAWÁI
-  ============================================================ -->
-  <section class="scene" id="scene-hawaii">
-    <div class="chapter-break fade-in" style="position:relative;z-index:3;">
-      <span class="chapter-num" aria-hidden="true">04</span>
-      <div class="break-line"></div>
-      <span class="label">Chapter Four</span>
-    </div>
-
-    <div class="sticky-wrap">
-      <div class="sticky-bg" id="hawaii-bg"></div>
-      <div class="sticky-overlay"></div>
-    </div>
-
-    <div class="steps-container" style="margin-top:-100svh;">
-      <div class="step">
-        <div class="step-inner">
-          <div class="label">Lo Que Le Pasó a Hawái</div>
-          <h2>A Warning, Not an Anthem</h2>
-          <p>
-            Everyone expected <em>Livin' la Vida Loca</em>. Instead, Ricky Martin
-            delivered an excerpt from Bad Bunny's <strong>"Lo Que Le Pasó a Hawái"</strong> —
-            a song that frames Hawaii as a cautionary tale for Puerto Rico about the
-            consequences of over-tourism, capitalism, and gentrification.
-          </p>
-          <p>
-            The choice was a deliberate rejection of the expected crossover moment —
-            and a demand for a different kind of attention.
-          </p>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-inner">
-          <div class="label">The Anatomy of Loss</div>
-          <h2>From the River to Grandma</h2>
-          <p>
-            The lyrics trace displacement as a gradual, devastating process —
-            moving from the landscape inward to the family home.
-            Hover each verse to reveal the English translation.
-          </p>
-
-          <div class="lyrics-block">
-            <div class="lyrics-hint">↑ Hover to translate</div>
-            <div class="lyrics-es">"Se vendió el río, se vendió la playa…"</div>
-            <div class="lyrics-en">The river was sold. The beach was sold. The natural inheritance — the first thing to go.</div>
-          </div>
-
-          <div class="lyrics-block">
-            <div class="lyrics-hint">↑ Hover to translate</div>
-            <div class="lyrics-es">"Se vendió mi barrio, ya no está mi gente…"</div>
-            <div class="lyrics-en">My neighbourhood was sold. My people are no longer there. Community follows the land.</div>
-          </div>
-
-          <div class="lyrics-block">
-            <div class="lyrics-hint">↑ Hover to translate</div>
-            <div class="lyrics-es">"No dejes que te quiten el lelolai…"</div>
-            <div class="lyrics-en">Don't let them take away the lelolai — the song, the spirit, the irreducible cultural memory.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-inner">
-          <div class="label">The Desperate Plea</div>
-          <h2>"Don't Let Go of the Flag"</h2>
-          <p>
-            Martin's performance urged listeners not to surrender the <em>lelolai</em> —
-            a traditional Puerto Rican musical expression — framing the song as a
-            last line of defence against deliberate whitewashing and cultural erasure.
-          </p>
-          <p>
-            Hawaii, once an independent kingdom absorbed into the United States, serves
-            as the mirror: a paradise sold, a culture diluted, an identity nearly overwritten.
-            The message to Puerto Rico was visceral and specific: <strong>you are watching it happen</strong>.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pull quote -->
-  <div class="pull-quote fade-in">
-    <blockquote>
-      A pop song became a political instrument — transmitted to 128 million people through
-      the most commercial event in American television.
-    </blockquote>
-    <cite>Lo Que Le Pasó a Hawái — decoded</cite>
-  </div>
-
-  <!-- ============================================================
-       CHAPTER 5 — THE LIGHT BLUE FLAG
-  ============================================================ -->
-  <section id="flag-section" class="fade-in">
-    <div class="chapter-break" style="grid-column:1/-1; padding-top:0; padding-left:0; padding-right:0;">
-      <span class="chapter-num" aria-hidden="true">05</span>
-      <div class="break-line"></div>
-      <span class="label">Chapter Five</span>
-    </div>
-
-    <div class="flag-text">
-      <div class="label" style="margin-bottom:0.8rem;">The Azul Celeste</div>
-      <h2 style="font-size:clamp(2rem,5vw,3.8rem); margin-bottom:1.2rem;">Colors Carry History</h2>
-      <p>
-        The Puerto Rican flag that waved during the performance was not quite the official one.
-        Its triangle was not the modern dark navy blue — it was <em>azul celeste</em>,
-        a pale sky blue.
-      </p>
-      <p>
-        The distinction is not cosmetic. It is <strong>criminal history</strong>.
-      </p>
-      <p>
-        The light blue flag is the original banner of the Puerto Rican independence movement.
-        Under the <strong>Gag Law (Law 53 of 1948)</strong> — the Ley de la Mordaza —
-        displaying this flag was a criminal offence punishable by imprisonment.
-        The law remained in force from 1948 until 1957.
-      </p>
-      <p>
-        By waving it on the Super Bowl stage in 2026, Bad Bunny transformed a 75-year-old
-        act of civil disobedience into a live global broadcast. The 128 million who watched
-        were — knowingly or not — witnesses to a flag that was once forbidden.
-      </p>
-    </div>
-
-    <div class="flag-visual">
-      <div class="label" style="margin-bottom:1rem;">The Two Flags</div>
-      <div class="flag-compare">
-
-        <!-- Independence flag (azul celeste) -->
-        <div class="flag-item">
-          <div class="flag-svg-wrap" title="The azul celeste flag — independence movement, criminalized 1948–1957">
-            <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
-              <!-- 5 horizontal stripes: red, white, red, white, red -->
-              <rect width="900" height="120" y="0"   fill="#C8102E"/>
-              <rect width="900" height="120" y="120" fill="#FFFFFF"/>
-              <rect width="900" height="120" y="240" fill="#C8102E"/>
-              <rect width="900" height="120" y="360" fill="#FFFFFF"/>
-              <rect width="900" height="120" y="480" fill="#C8102E"/>
-              <!-- azul celeste triangle -->
-              <polygon points="0,0 390,300 0,600" fill="#72B7E8"/>
-              <!-- White star -->
-              <polygon points="160,220 175,265 222,265 184,292 198,337 160,310 122,337 136,292 98,265 145,265"
-                fill="#FFFFFF"/>
-            </svg>
-          </div>
-          <div class="flag-meta">
-            <div class="flag-year">1895</div>
-            <p><em>Azul celeste</em> — the original independence flag. Criminalized under the Gag Law, 1948–1957. Worn on the Super Bowl stage, 2026.</p>
-          </div>
-        </div>
-
-        <!-- Official current flag (dark navy) -->
-        <div class="flag-item">
-          <div class="flag-svg-wrap" title="The official Puerto Rican flag — dark blue triangle">
-            <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
-              <rect width="900" height="120" y="0"   fill="#C8102E"/>
-              <rect width="900" height="120" y="120" fill="#FFFFFF"/>
-              <rect width="900" height="120" y="240" fill="#C8102E"/>
-              <rect width="900" height="120" y="360" fill="#FFFFFF"/>
-              <rect width="900" height="120" y="480" fill="#C8102E"/>
-              <!-- Official dark blue triangle -->
-              <polygon points="0,0 390,300 0,600" fill="#002868"/>
-              <!-- White star -->
-              <polygon points="160,220 175,265 222,265 184,292 198,337 160,310 122,337 136,292 98,265 145,265"
-                fill="#FFFFFF"/>
-            </svg>
-          </div>
-          <div class="flag-meta">
-            <div class="flag-year">2024</div>
-            <p>Official Puerto Rico flag — dark navy triangle. The <em>azul celeste</em> vs. navy distinction is a quiet, persistent marker of political identity.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       FINALE VISUAL — PR CROWD IMAGE
-  ============================================================ -->
-  <section class="scene" id="finale">
-    <div class="sticky-wrap">
-      <div class="sticky-bg" id="finale-bg"></div>
-      <div class="sticky-overlay"></div>
-    </div>
-
-    <div class="steps-container" style="margin-top:-100svh;">
-      <div class="step">
-        <div class="step-inner">
-          <div class="label">The Hemisphere</div>
-          <h2>Together,<br/>We Are<br/>America</h2>
-          <p>
-            The flags of every nation across the Americas were unfurled.
-            Then Bad Bunny spiked a football onto the turf.
-            On it, in clear lettering: <strong>"Together, We Are America."</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-inner">
-          <div class="label">Redefining the Word</div>
-          <h2>A Continent,<br/>Not a Country</h2>
-          <p>
-            The word <em>América</em> — in Spanish — refers to an entire hemisphere:
-            North, Central, and South. The United States' claim on the word as a
-            synonym for itself alone is, from this vantage point, an act of cultural
-            erasure.
-          </p>
-          <p>
-            Bad Bunny's spike was a correction. A reclamation. Broadcast live to
-            128 million people.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       EPILOGUE — TIMELINE
-  ============================================================ -->
-  <section id="epilogue">
-    <div class="label" style="margin-bottom:1rem;">Epilogue</div>
-    <h2>"The Performance Didn't End at the Stadium"</h2>
-    <p>
-      The 13-minute show triggered an instantaneous, global, real-time debate.
-      The digital network — X (Twitter), Instagram, Truth Social — became an
-      extension of the performance itself.
-    </p>
-
-    <div class="timeline">
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-time">T+0:00 — Kickoff</div>
-        <div class="tl-head">Bad Bunny Takes the Field</div>
-        <div class="tl-body">
-          The opening sequence begins. 380 performers emerge as sugarcane blades.
-          The broadcast begins its coded transmission to 128 million viewers.
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-time">T+3:20 — El Apagón</div>
-        <div class="tl-head">The Electrical Poles Light Up</div>
-        <div class="tl-body">
-          Dancers in <em>pavas</em> and <em>jíbaro</em> costumes scale sparking poles.
-          Social media erupts: "What does this mean?" The digital classroom is open.
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-time">T+5:45 — La Jersey</div>
-        <div class="tl-head">The Jersey Debate Splits the Network</div>
-        <div class="tl-body">
-          Close-up cameras catch <em>OCASIO 64</em>. Two simultaneous interpretations
-          explode across X: tribute vs. political statement. Both circulate simultaneously.
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-time">T+8:00 — La Casita</div>
-        <div class="tl-head">The Diaspora Assembles</div>
-        <div class="tl-body">
-          Ricky Martin sings <em>Lo Que Le Pasó a Hawái</em>. Toñita pours the shot.
-          The Casita becomes the most Googled set piece of the night.
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-time">T+10:30 — La Bandera</div>
-        <div class="tl-head">The Azul Celeste Goes Global</div>
-        <div class="tl-body">
-          Flag historians and Puerto Rican scholars flood timelines explaining the
-          light blue vs. dark blue distinction. A 75-year-old act of defiance trends worldwide.
-        </div>
-      </div>
-
-      <div class="tl-item climax">
-        <div class="tl-dot"></div>
-        <div class="tl-time">T+13:00 — The Spike</div>
-        <div class="tl-head">"Together, We Are America" — The Debate Erupts</div>
-        <div class="tl-body">
-          Bad Bunny spikes the football. Within minutes, Donald Trump posts to Truth Social.
-        </div>
-        <div class="trump-card">
-          <div class="tc-from">Donald Trump — Truth Social</div>
-          <p>
-            Called the performance "absolutely terrible" and "a slap in the face to our Country," 
-            adding that "nobody understands a word this guy is saying."
-          </p>
-        </div>
-        <div class="tl-body" style="margin-top:1rem;">
-          The response perfectly proved the thesis: the performance had become a
-          participatory, real-time global debate over history, borders, language, and identity.
-          It had not ended at Levi's Stadium. It lived on — and it continues to.
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Final YouTube CTA -->
-    <div style="margin-top:5rem; padding:2rem; background:rgba(200,16,46,0.08); border:1px solid rgba(200,16,46,0.3); border-radius:6px; text-align:center;">
-      <div class="label" style="margin-bottom:0.8rem;">Watch the Full Performance</div>
-      <p style="font-style:italic; color:var(--cream); max-width:44ch; margin:0 auto 1.5rem;">
-        See every layer decoded in this piece — the poles, the jersey, the Casita, the flag, the spike — in 13 minutes of live television.
-      </p>
-      <a href="https://www.youtube.com/watch?v=G6FuWd4wNd8" target="_blank" class="watch-btn" style="font-size:0.8rem; padding:0.8rem 2rem;">
-        <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M8 5v14l11-7z"/></svg>
-        Watch on YouTube
-      </a>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       FOOTER
-  ============================================================ -->
-  <footer>
-    <div>
-      <div class="footer-brand">BAD BUNNY<br />× SUPER BOWL<br />LX</div>
-      <p class="footer-sub">An interactive scrollytelling deconstruction of the 2026 NFL Super Bowl Halftime Show — unpacking the broadcast's layered political, cultural, and symbolic architecture.</p>
-    </div>
-    <ul class="footer-links">
-      <li><a href="#scene-apagon">El Apagón</a></li>
-      <li><a href="#jersey-section">La Jersey — Ocasio 64</a></li>
-      <li><a href="#scene-casita">La Casita & The Diaspora</a></li>
-      <li><a href="#scene-hawaii">Lo Que Le Pasó a Hawái</a></li>
-      <li><a href="#flag-section">The Azul Celeste</a></li>
-      <li><a href="#epilogue">Epilogue — The Spike</a></li>
-      <li><a href="https://www.youtube.com/watch?v=G6FuWd4wNd8" target="_blank">▶ Watch Full Performance</a></li>
-    </ul>
-    <div class="footer-copy">
-      Built for GitHub Pages · All media property of their respective owners · Scrollytelling experience · 2026
-    </div>
-  </footer>
-
-  <!-- ============================================================
-       JAVASCRIPT
-  ============================================================ -->
   <script>
     // ── Custom cursor ──
     const cursor = document.getElementById('cursor');
@@ -1956,21 +534,8 @@
       cursor.style.left = e.clientX + 'px';
       cursor.style.top = e.clientY + 'px';
     });
-    document.querySelectorAll('a, button, .guest-card, .hotspot, [tabindex]').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
-    });
 
-    // ── Progress bar ──
-    const progressBar = document.getElementById('progress-bar');
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const pct = (scrollTop / docHeight) * 100;
-      progressBar.style.width = pct + '%';
-    }, { passive: true });
-
-    // ── IntersectionObserver for .step elements ──
+    // ── IntersectionObserver for.step elements ──
     const stepObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         const inner = entry.target.querySelector('.step-inner');
@@ -1983,7 +548,7 @@
 
     document.querySelectorAll('.step').forEach(s => stepObserver.observe(s));
 
-    // ── IntersectionObserver for .fade-in elements ──
+    // ── IntersectionObserver for.fade-in elements ──
     const fadeObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('visible');
@@ -1992,62 +557,118 @@
 
     document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
 
-    // ── IntersectionObserver for timeline items ──
-    const tlObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => entry.target.classList.add('visible'), 100);
+    // ============================================================
+    //     D3.JS INTERACTIVE STADIUM MAP
+    // ============================================================
+    const renderD3Map = () => {
+        const container = d3.select("#stadium-map-container");
+        const tooltip = d3.select("#d3-tooltip");
+        
+        // Clear previous renders if any
+        container.selectAll("*").remove();
+
+        const width = container.node().getBoundingClientRect().width;
+        const height = container.node().getBoundingClientRect().height;
+
+        const svg = container.append("svg")
+           .attr("viewBox", `0 0 ${width} ${height}`)
+           .attr("preserveAspectRatio", "xMidYMid meet")
+           .style("background", "#121212")
+           .style("border", "1px solid #333")
+           .style("border-radius", "8px");
+
+        // 1. Draw Football Field Background (Yard Lines)
+        const fieldGroup = svg.append("g").attr("class", "field-lines");
+        for(let i = 1; i < 10; i++) {
+            fieldGroup.append("line")
+               .attr("x1", (width / 10) * i)
+               .attr("y1", 0)
+               .attr("x2", (width / 10) * i)
+               .attr("y2", height)
+               .style("stroke", "rgba(255, 255, 255, 0.1)")
+               .style("stroke-dasharray", "4,4")
+               .style("stroke-width", 2);
         }
-      });
-    }, { threshold: 0.2 });
 
-    document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
+        // Data for Stage Vignettes
+        const vignetteData =;
 
-    // ── Sticky background images (lazy-connect) ──
-    const apagonBg = document.getElementById('apagon-bg');
-    const hawaiiBg = document.getElementById('hawaii-bg');
-    const finaleBg = document.getElementById('finale-bg');
+        // Data for Camera Placements
+        const cameraData =;
 
-    if (apagonBg) apagonBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/Electricity%20poles%20sparking.avif')";
-    if (hawaiiBg) hawaiiBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/Ricky%20Martin%20and%20Lo%20Que%20Le%20Pas%C3%B3%20a%20Haw%C3%A1i.avif')";
-    if (finaleBg) finaleBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/bad-bunny-super-bowl-puerto-rico.webp')";
+        // 2. Draw Vignettes (Circles)
+        svg.selectAll(".vignette-node")
+           .data(vignetteData)
+           .enter()
+           .append("circle")
+           .attr("class", "vignette-node")
+           .attr("cx", d => d.x)
+           .attr("cy", d => d.y)
+           .attr("r", d => d.r)
+           .style("fill", d => d.color)
+           .style("fill-opacity", 0.4)
+           .style("stroke", d => d.color)
+           .style("stroke-width", 3)
+           .style("cursor", "crosshair")
+           .on("mouseover", function(event, d) {
+                d3.select(this).style("fill-opacity", 0.8);
+                tooltip.transition().duration(200).style("opacity", 1);
+                tooltip.html(`<strong>${d.id}</strong>${d.desc}`)
+                      .style("left", (event.pageX + 15) + "px")
+                      .style("top", (event.pageY - 28) + "px");
+                document.getElementById('cursor').classList.add('hovering');
+            })
+           .on("mouseout", function() {
+                d3.select(this).style("fill-opacity", 0.4);
+                tooltip.transition().duration(500).style("opacity", 0);
+                document.getElementById('cursor').classList.remove('hovering');
+            });
+            
+        // Add Vignette Labels
+        svg.selectAll(".vignette-label")
+           .data(vignetteData)
+           .enter()
+           .append("text")
+           .attr("x", d => d.x)
+           .attr("y", d => d.y)
+           .attr("text-anchor", "middle")
+           .attr("dominant-baseline", "middle")
+           .style("fill", "#fff")
+           .style("font-family", "var(--font-display)")
+           .style("font-size", "1.2rem")
+           .style("pointer-events", "none")
+           .text(d => d.id);
 
-    // ── El Apagón flicker effect (trigger on scroll into view) ──
-    const apagonScene = document.getElementById('scene-apagon');
-    const apagonBgEl = document.getElementById('apagon-bg');
-    if (apagonScene && apagonBgEl) {
-      const flickerObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) apagonBgEl.classList.add('flicker', 'active');
-          else apagonBgEl.classList.remove('active');
-        });
-      }, { threshold: 0.1 });
-      flickerObserver.observe(apagonScene);
-    }
+        // 3. Draw Camera Positions (Triangles)
+        const cameraSymbol = d3.symbol().type(d3.symbolTriangle).size(200);
+        
+        svg.selectAll(".camera-node")
+           .data(cameraData)
+           .enter()
+           .append("path")
+           .attr("d", cameraSymbol)
+           .attr("transform", d => `translate(${d.x}, ${d.y})`)
+           .style("fill", "var(--gold)")
+           .style("cursor", "crosshair")
+           .on("mouseover", function(event, d) {
+                d3.select(this).style("fill", "#fff").attr("transform", `translate(${d.x}, ${d.y}) scale(1.5)`);
+                tooltip.transition().duration(200).style("opacity", 1);
+                tooltip.html(`<strong>📸 ${d.id}</strong>${d.desc}`)
+                      .style("left", (event.pageX + 15) + "px")
+                      .style("top", (event.pageY - 28) + "px");
+                document.getElementById('cursor').classList.add('hovering');
+            })
+           .on("mouseout", function(event, d) {
+                d3.select(this).style("fill", "var(--gold)").attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
+                tooltip.transition().duration(500).style("opacity", 0);
+                document.getElementById('cursor').classList.remove('hovering');
+            });
+    };
 
-    // ── Lyrics reveal touch support (mobile) ──
-    document.querySelectorAll('.lyrics-block').forEach(block => {
-      block.addEventListener('click', () => block.classList.toggle('reveal'));
-    });
+    // Render map on load and resize
+    renderD3Map();
+    window.addEventListener('resize', renderD3Map);
 
-    // ── Jersey grid responsive fix ──
-    const jGrid = document.querySelector('.jersey-grid');
-    function fixJerseyGrid() {
-      if (jGrid) {
-        jGrid.style.gridTemplateColumns = window.innerWidth < 768 ? '1fr' : '1fr 1fr';
-      }
-    }
-    fixJerseyGrid();
-    window.addEventListener('resize', fixJerseyGrid, { passive: true });
   </script>
-
-  <!-- ============================================================
-       THIRD-PARTY EMBEDS
-  ============================================================ -->
-  <!-- Twitter / X widget -->
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-  <!-- Instagram embed -->
-  <script async src="//www.instagram.com/embed.js"></script>
 </body>
 </html>
