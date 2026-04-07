@@ -6,34 +6,34 @@
   <title>Bad Bunny & The New Media Super Bowl</title>
   <meta name="description" content="An interactive scrollytelling experience decoding Bad Bunny's 2026 Super Bowl Halftime Show." />
 
-  <!-- Modern Sleek Fonts -->
+  <!-- Rolling Stone Style Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
   
   <!-- D3.js -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
   <style>
     /* ============================================================
-       DESIGN TOKENS - LIGHT THEME
+       DESIGN TOKENS - MAGAZINE THEME (OLIVE TROPICAL BACKGROUND)
     ============================================================ */
     :root {
-      --bg-color:   #f8f9fa;
-      --surface:    #ffffff;
+      --bg-color:   #eceee5; /* Light olive-tinted off-white */
+      --surface:    rgba(255, 255, 255, 0.85);
       --text-main:  #111111;
-      --text-muted: #555555;
-      --red:        #c8102e;
+      --text-muted: #4a4a4a;
+      --red:        #d3122e; /* Punchy magazine red */
       --azul:       #3f88c5;
-      --azul-light: #246a9e; /* Darkened for light mode contrast */
-      --gold:       #b08d3a; /* Darkened for light mode contrast */
+      --azul-light: #246a9e; 
+      --gold:       #a67c00; 
 
-      --font-display: 'Montserrat', sans-serif;
-      --font-editorial: 'Montserrat', sans-serif;
-      --font-body: 'Inter', sans-serif;
+      --font-display: 'Anton', sans-serif; /* Massive, heavy impact */
+      --font-headline: 'Playfair Display', serif; /* Elegant, sharp serifs */
+      --font-body: 'Merriweather', serif; /* Highly readable editorial body */
       --font-mono: 'IBM Plex Mono', monospace;
 
-      --step-width: 520px;
+      --step-width: 560px;
     }
 
     /* ============================================================
@@ -43,40 +43,33 @@
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--bg-color);
+      background-color: var(--bg-color);
+      /* Ambient tropical olive & patriotic blend */
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(85, 107, 47, 0.12) 0%, transparent 50%), /* Olive Tropical Green */
+        radial-gradient(circle at 90% 30%, rgba(200, 16, 46, 0.08) 0%, transparent 40%), /* Red */
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.7) 0%, transparent 60%), /* Bright center */
+        radial-gradient(circle at 80% 80%, rgba(85, 107, 47, 0.1) 0%, transparent 45%), /* Olive Tropical Green */
+        radial-gradient(circle at 20% 90%, rgba(63, 136, 197, 0.08) 0%, transparent 50%); /* Blue */
+      background-attachment: fixed;
       color: var(--text-main);
       font-family: var(--font-body);
-      font-size: clamp(1rem, 1.2vw, 1.15rem);
+      font-size: clamp(1.05rem, 1.2vw, 1.2rem);
       line-height: 1.8;
       overflow-x: hidden;
-      cursor: none;
     }
-
-    /* Custom cursor */
-    .cursor {
-      position: fixed;
-      width: 12px; height: 12px;
-      background: var(--red);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
-      mix-blend-mode: multiply; /* Adjusted for light background */
-    }
-    .cursor.hovering { width: 32px; height: 32px; background: var(--azul); }
 
     /* Scrollbar */
-    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg-color); }
-    ::-webkit-scrollbar-thumb { background: var(--red); }
+    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 10px; }
 
     /* ============================================================
        TYPOGRAPHY UTILITIES
     ============================================================ */
     .label {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 600;
       letter-spacing: 0.15em;
       text-transform: uppercase;
@@ -88,34 +81,62 @@
       font-size: clamp(4rem, 10vw, 8rem);
       line-height: 0.85;
       color: transparent;
-      -webkit-text-stroke: 1px rgba(0,0,0,0.1);
+      -webkit-text-stroke: 2px var(--red);
+      opacity: 0.2;
       user-select: none;
       pointer-events: none;
     }
 
     h1, h2, h3 {
-      font-family: var(--font-editorial);
-      font-weight: 800;
-      line-height: 1.1;
+      font-family: var(--font-headline);
+      font-weight: 900;
+      line-height: 1.05;
       letter-spacing: -0.02em;
     }
 
-    strong { color: var(--text-main); font-weight: 600; }
+    strong { color: var(--text-main); font-weight: 900; font-family: var(--font-headline); }
     em { font-style: italic; color: var(--text-muted); }
 
-    a { color: var(--azul-light); text-decoration: none; border-bottom: 1px solid currentColor; }
-    a:hover { color: var(--red); }
+    a { color: var(--red); text-decoration: none; border-bottom: 2px solid transparent; transition: border-color 0.2s; }
+    a:hover { border-bottom-color: currentColor; }
 
-    p + p { margin-top: 1.2em; }
+    p + p { margin-top: 1.5em; }
+    
+    .lx-usa {
+      background: linear-gradient(135deg, #B31942 30%, #111 45%, #111 55%, #0A3161 70%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
+      display: inline-block;
+      font-family: var(--font-display);
+      letter-spacing: 0.05em;
+    }
 
-    /* Image Fade Effect */
+    /* ============================================================
+       IMAGES & CAPTIONS
+    ============================================================ */
     .fade-image-y {
       width: 100%;
       height: auto;
       display: block;
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-      mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-      border-radius: 8px;
+      border-radius: 4px;
+      /* Significantly reduced blur - only soft at the very bottom edge */
+      -webkit-mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .image-caption {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: center;
+      margin-top: 1rem;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      padding-bottom: 0.5rem;
+      display: block;
     }
 
     /* ============================================================
@@ -128,18 +149,18 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
-      background: rgba(248,249,250,0.8);
+      padding: 1.5rem 2rem;
+      background: rgba(236, 238, 229, 0.95);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0,0,0,0.05);
+      border-bottom: 2px solid var(--text-main);
     }
 
     .nav-brand {
       font-family: var(--font-display);
-      font-weight: 900;
-      font-size: 1.1rem;
+      font-size: 1.5rem;
       letter-spacing: 0.05em;
       color: var(--text-main);
+      text-transform: uppercase;
     }
 
     .nav-links {
@@ -148,21 +169,20 @@
     }
     .nav-links a {
       font-family: var(--font-mono);
-      font-size: 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--text-muted);
+      color: var(--text-main);
       border: none;
-      transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--red); }
 
-    /* Progress bar */
     #progress-bar {
       position: fixed;
       top: 0; left: 0;
-      height: 3px;
-      background: linear-gradient(to right, var(--red), var(--azul));
+      height: 4px;
+      background: var(--red);
       z-index: 200;
       width: 0%;
       transition: width 0.1s linear;
@@ -173,122 +193,117 @@
     ============================================================ */
     #hero {
       position: relative;
-      min-height: 80svh;
+      min-height: 85svh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       overflow: hidden;
-      padding: clamp(6rem, 12vw, 10rem) clamp(2rem, 6vw, 5rem) 4rem;
+      padding: clamp(8rem, 15vw, 12rem) clamp(2rem, 6vw, 5rem) 4rem;
     }
 
     .byline {
       font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      font-weight: 600;
+      margin-top: 1.5rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      border-top: 2px solid var(--red);
+      display: inline-block;
+      padding-top: 0.5rem;
     }
 
     #hero-content {
       position: relative;
       z-index: 2;
-      max-width: 900px;
+      max-width: 1000px;
     }
 
-    #hero-content .label { margin-bottom: 1rem; }
-
     #hero-content h1 {
-      font-size: clamp(3rem, 7vw, 6rem);
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 10vw, 9rem);
+      line-height: 0.9;
       margin-bottom: 1.5rem;
-      animation: fadeSlideUp 1.2s 0.3s both ease;
+      text-transform: uppercase;
       color: var(--text-main);
+      letter-spacing: 0.01em;
     }
 
     .hero-sub {
-      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-family: var(--font-headline);
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 400;
+      font-style: italic;
       color: var(--text-muted);
-      max-width: 56ch;
-      animation: fadeSlideUp 1.2s 0.6s both ease;
+      max-width: 45ch;
+      line-height: 1.4;
     }
 
     .hero-meta {
-      margin-top: 2rem;
+      margin-top: 3rem;
       display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;
-      animation: fadeSlideUp 1.2s 0.9s both ease;
     }
 
     .hero-meta span {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-
-    .watch-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.8rem 1.6rem;
-      background: var(--red);
-      color: #fff !important;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.05em;
+      color: var(--text-main);
       text-transform: uppercase;
-      border: none;
+      background: rgba(0,0,0,0.05);
+      padding: 0.4rem 0.8rem;
       border-radius: 4px;
-      transition: background 0.2s, transform 0.15s;
     }
-    .watch-btn:hover { background: #a50e25; transform: translateY(-2px); border: none; }
-    .watch-btn svg { width: 16px; height: 16px; }
 
     /* ============================================================
        D3 MAP SECTION
     ============================================================ */
     #d3-section {
-      padding: 2rem clamp(2rem, 6vw, 5rem);
+      padding: 4rem clamp(2rem, 6vw, 5rem);
       max-width: 1200px;
       margin: 0 auto;
     }
     .d3-tooltip {
       position: absolute;
       text-align: left;
-      padding: 12px 16px;
+      padding: 16px;
       font-family: var(--font-body);
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       background: var(--surface);
       color: var(--text-main);
-      border: 1px solid rgba(0,0,0,0.1);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      border-radius: 6px;
+      border: 2px solid var(--text-main);
+      box-shadow: 10px 10px 0px rgba(0,0,0,0.1);
+      border-radius: 0px;
       pointer-events: none;
       z-index: 1000;
       transition: opacity 0.2s;
+      max-width: 250px;
     }
     .d3-tooltip strong {
       font-family: var(--font-display);
-      font-size: 1rem;
+      font-size: 1.2rem;
       color: var(--red);
       display: block;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
 
     /* ============================================================
        INTRO BLOCK
     ============================================================ */
     #intro {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 4rem 2rem;
+      padding: 5rem 2rem;
       text-align: center;
     }
 
     #intro .big-stat {
       font-family: var(--font-display);
-      font-size: clamp(4rem, 12vw, 10rem);
+      font-size: clamp(6rem, 15vw, 12rem);
       line-height: 0.85;
       color: var(--red);
       display: block;
@@ -296,14 +311,17 @@
     }
 
     #intro p {
-      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
-      color: var(--text-muted);
-      max-width: 52ch;
+      font-family: var(--font-headline);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-style: italic;
+      line-height: 1.4;
+      color: var(--text-main);
+      max-width: 40ch;
       margin: 0 auto;
     }
 
     /* ============================================================
-       SCROLLYTELLING ENGINE (ADAPTED FOR LIGHT MODE)
+       SCROLLYTELLING ENGINE
     ============================================================ */
     .scene { position: relative; margin-bottom: 4rem; }
 
@@ -327,20 +345,20 @@
       inset: 0;
       background: linear-gradient(
         to right,
-        rgba(255,255,255,0.98) 0%,
-        rgba(255,255,255,0.85) 45%,
-        rgba(255,255,255,0.2) 100%
+        rgba(236, 238, 229, 0.98) 0%,
+        rgba(236, 238, 229, 0.85) 45%,
+        rgba(236, 238, 229, 0.1) 100%
       );
     }
 
     .steps-container {
       position: relative;
       z-index: 2;
-      margin-top: -100svh; /* Keeps steps overlaying the sticky background */
+      margin-top: -100svh;
     }
 
     .step {
-      min-height: 80svh; /* Tightened from 100svh */
+      min-height: 80svh;
       display: flex;
       align-items: center;
       padding: 2rem;
@@ -352,26 +370,24 @@
       opacity: 0;
       transform: translateY(40px);
       transition: opacity 0.7s ease, transform 0.7s ease;
-      background: rgba(255,255,255,0.8);
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-      backdrop-filter: blur(5px);
+      background: var(--surface);
+      padding: 3rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      box-shadow: 15px 15px 0px rgba(0,0,0,0.05);
+      backdrop-filter: blur(10px);
     }
     .step-inner.visible {
       opacity: 1;
       transform: translateY(0);
     }
 
-    .step-inner .label { margin-bottom: 0.8rem; }
+    .step-inner .label { margin-bottom: 1.2rem; display: inline-block; border-bottom: 2px solid var(--red); padding-bottom: 0.2rem;}
 
     .step-inner h2 {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      margin-bottom: 1.2rem;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      margin-bottom: 1.5rem;
       color: var(--text-main);
     }
-
-    .step-inner p { color: var(--text-muted); }
 
     /* ============================================================
        CHAPTER DIVIDERS
@@ -379,23 +395,125 @@
     .chapter-break {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
-      padding: 2rem clamp(2rem, 6vw, 5rem);
+      gap: 2rem;
+      padding: 4rem clamp(2rem, 6vw, 5rem);
       overflow: hidden;
+    }
+    .chapter-break .label {
+      font-family: var(--font-headline);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      color: var(--text-main);
+      text-transform: none;
+      letter-spacing: 0;
+      white-space: nowrap;
     }
     .chapter-break .break-line {
       flex: 1;
-      height: 1px;
-      background: linear-gradient(to right, rgba(200,16,46,0.3), transparent);
+      height: 4px;
+      background: var(--text-main);
     }
 
     /* ============================================================
-       SPECIFIC SCENES
+       INTERACTIVE HOTSPOTS (CLICK BASED)
     ============================================================ */
-    /* Apagón text glow */
-    .blackout-word {
-      color: var(--azul);
+    .interactive-image-wrap {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    .hotspot-ring {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 3px solid var(--red);
+      background: rgba(255,255,255,0.8);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.2s, background 0.2s;
+    }
+    .hotspot-ring::after {
+      content: '+';
+      font-family: var(--font-mono);
       font-weight: bold;
+      color: var(--red);
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+    }
+    .hotspot.active .hotspot-ring {
+      background: var(--red);
+    }
+    .hotspot.active .hotspot-ring::after {
+      content: '×';
+      color: white;
+      transform: rotate(90deg);
+    }
+
+    .hotspot-tooltip {
+      position: absolute;
+      bottom: calc(100% + 15px);
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--text-main);
+      color: white;
+      border-radius: 0;
+      padding: 1.5rem;
+      width: 260px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      border-top: 4px solid var(--red);
+    }
+    .hotspot-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -8px;
+      border-width: 8px;
+      border-style: solid;
+      border-color: var(--text-main) transparent transparent transparent;
+    }
+
+    .hotspot.active .hotspot-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+      z-index: 10;
+    }
+
+    .hotspot-tooltip .tt-label {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .hotspot-tooltip p {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: #eaeaea;
+      line-height: 1.6;
+      margin-top: 0;
+    }
+
+    /* Fix tooltip overflow for right-side hotspots */
+    .hotspot-right .hotspot-tooltip {
+      left: auto; right: -18px; transform: translateX(0) translateY(10px);
+    }
+    .hotspot-right.active .hotspot-tooltip {
+      transform: translateX(0) translateY(0);
+    }
+    .hotspot-right .hotspot-tooltip::after {
+      left: auto; right: 26px;
     }
 
     /* JERSEY */
@@ -410,14 +528,14 @@
     .jersey-visual { position: relative; }
     .jersey-svg-wrap {
       width: 100%; max-width: 360px; aspect-ratio: 3/4;
-      background: linear-gradient(135deg, #e4e0d7 0%, #f4f0e6 50%, #e4e0d7 100%);
-      border-radius: 8px;
+      background: linear-gradient(135deg, #e4e0d7 0%, #fcfbf8 50%, #e4e0d7 100%);
+      border: 1px solid rgba(0,0,0,0.1);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      box-shadow: 20px 20px 0px rgba(0,0,0,0.05);
       margin: 0 auto; position: relative;
     }
-    .jersey-text-top { font-family: var(--font-display); font-size: 3rem; color: #1a1a1a; }
-    .jersey-text-num { font-family: var(--font-display); font-size: 7rem; line-height: 0.9; color: #1a1a1a; }
+    .jersey-text-top { font-family: var(--font-display); font-size: 3.5rem; color: #1a1a1a; letter-spacing: 0.05em;}
+    .jersey-text-num { font-family: var(--font-display); font-size: 8rem; line-height: 0.9; color: var(--red); }
 
     /* CASITA & GUESTS */
     .casita-header {
@@ -426,39 +544,32 @@
     }
     @media (max-width: 768px) { .casita-header { grid-template-columns: 1fr; } }
     .guests-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem;
       padding: 0 clamp(2rem, 6vw, 5rem);
     }
     .guest-card {
       background: var(--surface);
-      border: 1px solid rgba(0,0,0,0.08);
-      border-radius: 8px;
+      border: 1px solid var(--text-main);
       padding: 1.5rem 1rem;
       text-align: center;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 6px 6px 0px rgba(0,0,0,0.1);
     }
-    .guest-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); border-color: var(--red); }
     .guest-img {
-      width: 64px; height: 64px; border-radius: 50%; object-fit: cover;
-      margin: 0 auto 0.8rem; border: 2px solid var(--bg-color); box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
+      margin: 0 auto 1rem; border: 3px solid var(--text-main);
+      filter: grayscale(100%) contrast(120%);
     }
-    .guest-name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--text-main); margin-bottom: 0.2rem; }
-    .guest-role { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
-    .guest-detail { display: none; font-size: 0.85rem; color: var(--text-muted); margin-top: 0.8rem; line-height: 1.5; }
-    .guest-card.open .guest-detail { display: block; }
+    .guest-name { font-family: var(--font-display); font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.2rem; letter-spacing: 0.05em;}
+    .guest-role { font-family: var(--font-mono); font-size: 0.75rem; color: var(--red); font-weight: 600; text-transform: uppercase; }
 
     /* HAWAI LYRICS */
     .lyrics-block {
-      margin: 1.5rem 0; padding: 1.2rem 1.5rem;
-      border-left: 3px solid var(--azul);
-      background: rgba(63,136,197,0.05);
-      cursor: crosshair;
+      margin: 2rem 0; padding: 1.5rem 2rem;
+      border-left: 4px solid var(--text-main);
+      background: rgba(0,0,0,0.03);
     }
-    .lyrics-es { font-family: var(--font-body); font-size: 1.1rem; color: var(--text-main); font-weight: 500; }
-    .lyrics-en { font-size: 0.95rem; color: var(--azul-light); margin-top: 0.5rem; opacity: 0; height: 0; overflow: hidden; transition: opacity 0.4s; }
-    .lyrics-block:hover .lyrics-en, .lyrics-block.reveal .lyrics-en { opacity: 1; height: auto; }
+    .lyrics-es { font-family: var(--font-headline); font-size: 1.5rem; font-weight: 900; color: var(--text-main); }
+    .lyrics-en { font-family: var(--font-mono); font-size: 0.85rem; color: var(--red); margin-top: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;}
     
     /* FLAG SECTION */
     #flag-section {
@@ -467,82 +578,73 @@
     }
     @media (max-width: 768px) { #flag-section { grid-template-columns: 1fr; } }
     .flag-svg-wrap {
-      width: 120px; height: 72px; border-radius: 4px; overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15); flex-shrink: 0;
+      width: 140px; height: 84px; border: 1px solid rgba(0,0,0,0.1);
+      box-shadow: 10px 10px 0px rgba(0,0,0,0.05); flex-shrink: 0;
     }
-    .flag-item { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; }
-    .flag-meta .flag-year { font-family: var(--font-display); font-size: 2rem; font-weight: 900; color: var(--text-main); }
-    .flag-meta p { font-size: 0.9rem; color: var(--text-muted); }
+    .flag-item { display: flex; align-items: center; gap: 2rem; margin-bottom: 2.5rem; }
+    .flag-meta .flag-year { font-family: var(--font-display); font-size: 3rem; color: var(--text-main); line-height: 1;}
 
     /* ============================================================
        EMBEDS & SETLIST
     ============================================================ */
-    .embed-section { padding: 2rem clamp(2rem, 6vw, 5rem); }
+    .embed-section { padding: 4rem clamp(2rem, 6vw, 5rem); }
     .setlist-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
+      gap: 3rem;
+      margin-top: 3rem;
     }
     .setlist-grid iframe {
       width: 100%;
       aspect-ratio: 16/9;
-      border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border: 2px solid var(--text-main);
+      box-shadow: 10px 10px 0px rgba(0,0,0,0.1);
     }
-    .embed-card {
-      background: var(--surface); border: 1px solid rgba(0,0,0,0.08);
-      border-radius: 8px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-    }
-    .embed-caption {
-      font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase;
-      color: var(--text-muted); padding: 1rem; border-top: 1px solid rgba(0,0,0,0.05);
-      background: var(--bg-color);
-    }
-    .img-container { margin: 3rem 0; }
 
     /* ============================================================
        EPILOGUE — TIMELINE
     ============================================================ */
     #epilogue { padding: 4rem clamp(2rem, 6vw, 5rem); max-width: 900px; margin: 0 auto; }
-    .timeline { position: relative; padding-left: 2rem; margin-top: 3rem; }
+    .timeline { position: relative; padding-left: 2.5rem; margin-top: 4rem; }
     .timeline::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
-      background: linear-gradient(to bottom, var(--red), var(--azul), transparent);
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+      background: var(--text-main);
     }
-    .tl-item { position: relative; padding-bottom: 3rem; padding-left: 2rem; opacity: 0; transform: translateX(-20px); transition: opacity 0.6s, transform 0.6s; }
+    .tl-item { position: relative; padding-bottom: 4rem; padding-left: 2rem; opacity: 0; transform: translateX(-20px); transition: opacity 0.6s, transform 0.6s; }
     .tl-item.visible { opacity: 1; transform: translateX(0); }
     .tl-dot {
-      position: absolute; left: -2.4rem; top: 0.3rem; width: 14px; height: 14px;
-      border-radius: 50%; background: var(--surface); border: 3px solid var(--red);
+      position: absolute; left: -2.95rem; top: 0; width: 20px; height: 20px;
+      border-radius: 50%; background: var(--surface); border: 4px solid var(--red);
     }
     .tl-item:nth-child(2n) .tl-dot { border-color: var(--azul); }
-    .tl-time { font-family: var(--font-mono); font-size: 0.7rem; color: var(--red); font-weight: 600; margin-bottom: 0.3rem; }
-    .tl-head { font-family: var(--font-editorial); font-size: 1.4rem; color: var(--text-main); margin-bottom: 0.5rem; }
-    .tl-body { font-size: 1rem; color: var(--text-muted); max-width: 55ch; }
+    .tl-time { font-family: var(--font-mono); font-size: 0.85rem; color: var(--red); font-weight: 600; margin-bottom: 0.5rem; letter-spacing: 0.05em;}
+    .tl-head { font-family: var(--font-headline); font-size: 1.8rem; font-weight: 900; color: var(--text-main); margin-bottom: 0.8rem; }
+    .tl-body { font-size: 1.05rem; color: var(--text-muted); max-width: 55ch; }
 
     /* ============================================================
        FOOTER
     ============================================================ */
     footer {
-      padding: 5rem clamp(2rem, 6vw, 5rem) 2rem;
-      background: var(--surface); border-top: 1px solid rgba(0,0,0,0.05);
-      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 4rem;
+      padding: 6rem clamp(2rem, 6vw, 5rem) 2rem;
+      background: var(--text-main);
+      color: white;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 4rem;
     }
     @media (max-width: 600px) { footer { grid-template-columns: 1fr; } }
-    .footer-brand { font-family: var(--font-display); font-size: 2rem; font-weight: 900; color: var(--text-main); margin-bottom: 1rem; line-height: 1.1; }
-    .footer-sub { color: var(--text-muted); font-size: 0.95rem; }
-    .footer-copy { grid-column: 1 / -1; padding-top: 2rem; border-top: 1px solid rgba(0,0,0,0.05); font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
+    .footer-brand { font-family: var(--font-display); font-size: 3rem; color: white; margin-bottom: 1rem; line-height: 1; letter-spacing: 0.05em;}
+    .footer-sub { color: #aaa; font-size: 1rem; font-family: var(--font-body); }
+    .footer-links a { color: #fff; font-family: var(--font-mono); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em;}
+    .footer-links a:hover { color: var(--red); }
+    .footer-copy { grid-column: 1 / -1; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.1); font-family: var(--font-mono); font-size: 0.75rem; color: #666; text-transform: uppercase; }
 
     /* Animations */
     @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .fade-in { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
   </style>
 </head>
 <body>
 
-  <div class="cursor" id="cursor"></div>
   <div id="progress-bar"></div>
 
   <nav>
@@ -562,14 +664,14 @@
   <section id="hero">
     <div id="hero-content">
       <div class="label">February · 2026 · Levi's Stadium</div>
-      <h1>Bad Bunny<br />& the New Media<br />Super Bowl</h1>
+      <h1>Bad Bunny<br />& the New Media<br />Super Bowl <span class="lx-usa">LX</span></h1>
       <p class="hero-sub">
         The 2026 Halftime Show was not a concert. It was a broadcast engineered for
         128 million eyes — a digital classroom coded in symbolism, culture, and defiance.
       </p>
       <div class="byline">By Rohan Dutta</div>
       <div class="hero-meta">
-        <span>13-minute performance</span>
+        <span>13-min performance</span>
         <span>175 cameras</span>
         <span>380 performers</span>
       </div>
@@ -579,11 +681,11 @@
   <!-- Interactive D3 Map Section -->
   <section id="d3-section" class="fade-in">
     <div class="label" style="margin-bottom: 1rem;">Interactive Production Map</div>
-    <h2 style="margin-bottom: 1rem;">The Stadium as a Soundstage</h2>
-    <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 65ch;">
-      Explore the top-down broadcast architecture utilized by the Funicular Goats team. Hover over the nodes to reveal stage vignettes and specific Sony cinema camera placements.
+    <h2 style="margin-bottom: 1.5rem; font-size: clamp(2.5rem, 5vw, 4rem);">The Stadium as a Soundstage</h2>
+    <p style="color: var(--text-muted); margin-bottom: 3rem; max-width: 60ch; font-size: 1.2rem;">
+      Explore the top-down broadcast architecture utilized by the Funicular Goats team. <strong>Click the nodes</strong> to reveal stage vignettes and specific Sony cinema camera placements.
     </p>
-    <div id="d3-map-container" style="position: relative; width: 100%; max-width: 900px; margin: 0 auto; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-radius: 8px;"></div>
+    <div id="d3-map-container" style="position: relative; width: 100%; max-width: 1000px; margin: 0 auto; border: 4px solid var(--text-main); box-shadow: 20px 20px 0px rgba(0,0,0,0.05);"></div>
   </section>
 
   <!-- ============================================================
@@ -598,15 +700,34 @@
     </p>
   </section>
 
-  <div class="embed-section fade-in">
-    <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/LofiStadiumOverview.webp" alt="Stadium Overview" class="fade-image-y" />
-  </div>
+  <figure class="embed-section fade-in" style="max-width: 1200px; margin: 0 auto;">
+    <div class="interactive-image-wrap">
+      <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/LofiStadiumOverview.webp" alt="Stadium Overview" class="fade-image-y" />
+      
+      <!-- Stadium Map Hotspots -->
+      <div class="hotspot" style="top: 45%; left: 50%; transform: translate(-50%, -50%);">
+        <div class="hotspot-ring"></div>
+        <div class="hotspot-tooltip">
+          <div class="tt-label">The 50-Yard Line</div>
+          <p>Transformed completely by 380 human performers moving in sync, masking the NFL logo entirely from broadcast view.</p>
+        </div>
+      </div>
+      
+      <div class="hotspot hotspot-right" style="top: 25%; left: 20%;">
+        <div class="hotspot-ring"></div>
+        <div class="hotspot-tooltip">
+          <div class="tt-label">Cinematic Rigs</div>
+          <p>Traditional broadcast cameras were replaced by Sony VENICE 2 cinema rigs, giving the live feed a cinematic, movie-like depth of field.</p>
+        </div>
+      </div>
+    </div>
+    <figcaption class="image-caption">Levi's Stadium transformed into a sprawling set. Click the red nodes to explore.</figcaption>
+  </figure>
 
   <section class="scene" id="scene-prologue">
     <div class="chapter-break fade-in">
-      <span class="chapter-num" aria-hidden="true">00</span>
-      <div class="break-line"></div>
       <span class="label">Prologue</span>
+      <div class="break-line"></div>
     </div>
 
     <div class="sticky-wrap" aria-hidden="true">
@@ -621,7 +742,7 @@
           <h2>Human Engineering</h2>
           <p>
             Creative director <strong>Harriet Cuddeford</strong> and <strong>Yellow Studio</strong>
-            faced the NFL's hard cap: no more than 25 motorized carts. Their solution? 380 human beings costumed as sugarcane, capable of walking off the field instantly.
+            faced the NFL's hard cap: no more than 25 motorized carts. Their solution? 380 human beings costumed as sugarcane, capable of walking off the field instantly, replacing machines with sheer manpower.
           </p>
         </div>
       </div>
@@ -633,9 +754,8 @@
   ============================================================ -->
   <section class="scene" id="scene-apagon">
     <div class="chapter-break fade-in">
-      <span class="chapter-num" aria-hidden="true">01</span>
-      <div class="break-line"></div>
       <span class="label">Chapter One</span>
+      <div class="break-line"></div>
     </div>
 
     <div class="sticky-wrap">
@@ -651,16 +771,23 @@
           <p>
             When the lights flickered on those sparking electrical poles, art became a
             <span class="blackout-word">digital classroom</span>. Bad Bunny scaled the poles
-            before an audience of 128 million people.
+            before an audience of 128 million people, bringing a searing critique of Puerto Rico's failing infrastructure straight to Middle America.
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="embed-section fade-in">
-    <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Badbunnyfalling.webp" alt="Bad Bunny Falling" class="fade-image-y" style="margin-bottom: 2rem;"/>
-    <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Badbunny%20on%20car.webp" alt="Bad Bunny on Car" class="fade-image-y" />
+  <div class="embed-section fade-in" style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 4rem;">
+    <figure>
+      <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Badbunnyfalling.webp" alt="Bad Bunny Falling" class="fade-image-y" />
+      <figcaption class="image-caption">The controversial "dwerking" sequence, executed live from the top of the set.</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Badbunny%20on%20car.webp" alt="Bad Bunny on Car" class="fade-image-y" />
+      <figcaption class="image-caption">Ocasio atop the motorized prop car, directly engaging the stadium cameras.</figcaption>
+    </figure>
   </div>
 
   <!-- ============================================================
@@ -668,92 +795,131 @@
   ============================================================ -->
   <section id="jersey-section" class="fade-in">
     <div class="chapter-break" style="grid-column: 1/-1; padding-left:0; padding-right:0;">
-      <span class="chapter-num" aria-hidden="true">02</span>
-      <div class="break-line"></div>
       <span class="label">Chapter Two</span>
+      <div class="break-line"></div>
     </div>
 
     <!-- Visual -->
     <div class="jersey-visual">
       <div class="jersey-svg-wrap">
+        
+        <!-- hotspot: Ocasio -->
+        <div class="hotspot hotspot-right" style="top: 25%; left: 20%;">
+          <div class="hotspot-ring"></div>
+          <div class="hotspot-tooltip">
+            <div class="tt-label">Reading 1 — Family</div>
+            <p><em>Ocasio</em> is Bad Bunny's maternal surname. A deeply personal tribute to his late uncle stitched into the biggest stage on earth.</p>
+          </div>
+        </div>
+        
+        <!-- hotspot: 64 -->
+        <div class="hotspot" style="bottom: 25%; right: 20%;">
+          <div class="hotspot-ring"></div>
+          <div class="hotspot-tooltip">
+            <div class="tt-label">Reading 2 — Political</div>
+            <p><em>64</em> was the government's initial, heavily disputed Hurricane Maria death toll—the number that triggered mass protests.</p>
+          </div>
+        </div>
+
         <div class="jersey-text-top">OCASIO</div>
         <div class="jersey-text-num">64</div>
       </div>
+      <p style="text-align:center; margin-top:1.5rem; font-family:var(--font-mono); font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--red); font-weight: 600;">↑ Click the nodes to reveal dual readings</p>
     </div>
 
     <!-- Text -->
     <div>
       <div class="label">Chapter Two — The Jersey</div>
-      <h2 style="font-size:clamp(2rem,4vw,3rem); margin:0.8rem 0 1.2rem;">The "Ocasio 64" Ambiguity</h2>
+      <h2 style="font-size:clamp(2.5rem,5vw,4rem); margin:0.8rem 0 1.5rem;">The "Ocasio 64" Ambiguity</h2>
       <p>
         Bad Bunny took the field wearing a custom cream Zara jersey reading <strong>OCASIO 64</strong>.
         In the new media ecosystem, a single garment transmitted two simultaneous messages.
       </p>
       <p>
-        To the family network: a tribute to his late uncle <em>Cutito</em>, born in 1964. To the political network: a stark reminder that the Puerto Rican government initially reported only <strong>64 deaths</strong> from Hurricane Maria.
+        To the family network: a tribute to his late uncle <em>Cutito</em>, born in 1964. To the political network: a stark reminder that the Puerto Rican government initially reported only <strong>64 deaths</strong> from Hurricane Maria, a figure independent researchers revised to over 3,000.
       </p>
     </div>
 
-    <div style="grid-column: 1/-1; margin-top: 2rem;">
+    <figure style="grid-column: 1/-1; margin-top: 2rem;">
       <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/d2686efa3bfeef2841e817fc9df86be20ee362ba/ocasio64.webp" alt="Ocasio 64 Jersey Upclose" class="fade-image-y" />
-    </div>
+      <figcaption class="image-caption">Detail shot of the custom Zara 'Ocasio 64' Jersey</figcaption>
+    </figure>
   </section>
 
   <!-- ============================================================
        CHAPTER 3 — LA CASITA & THE DIASPORA
   ============================================================ -->
-  <section id="scene-casita" class="fade-in" style="padding-top: 2rem;">
+  <section id="scene-casita" class="fade-in" style="padding-top: 4rem;">
     <div class="chapter-break">
-      <span class="chapter-num" aria-hidden="true">03</span>
-      <div class="break-line"></div>
       <span class="label">Chapter Three</span>
+      <div class="break-line"></div>
     </div>
 
     <div class="casita-header">
       <div>
         <div class="label">La Casita · The Diaspora</div>
-        <h2 style="font-size:clamp(2rem,4vw,3rem); margin: 0.8rem 0 1.2rem;">The Field Became a Narrative Landscape</h2>
+        <h2 style="font-size:clamp(2.5rem,5vw,4rem); margin: 0.8rem 0 1.5rem;">The Field Became a Narrative Landscape</h2>
         <p>
           The emotional centre of the stage was <strong>La Casita</strong> — a salmon-pink house modelled after a real home in Humacao, alongside a Nuyorican barber shop.
         </p>
       </div>
       <div>
-         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/LaCasita.webp" alt="La Casita Entire Set" class="fade-image-y" style="border-radius: 8px;" />
+         <figure class="interactive-image-wrap">
+           <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/LaCasita.webp" alt="La Casita Entire Set" class="fade-image-y" />
+           
+           <div class="hotspot hotspot-right" style="top: 30%; left: 30%;">
+             <div class="hotspot-ring"></div>
+             <div class="hotspot-tooltip">
+               <div class="tt-label">The Salmon Facade</div>
+               <p>Modeled faithfully after a real working-class home in Humacao, PR, centering ordinary island life on an extraordinary stage.</p>
+             </div>
+           </div>
+
+           <div class="hotspot" style="bottom: 20%; right: 25%;">
+             <div class="hotspot-ring"></div>
+             <div class="hotspot-tooltip">
+               <div class="tt-label">Toñita's Bar</div>
+               <p>A replica of the famous Williamsburg social club, collapsing the geographical distance between the island and its NYC diaspora.</p>
+             </div>
+           </div>
+         </figure>
+         <figcaption class="image-caption">La Casita set structure. Click nodes to explore narrative details.</figcaption>
       </div>
     </div>
 
-    <div class="embed-section" style="text-align:center;">
-        <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/LadygagaandBadbunny.webp" alt="Lady Gaga and Bad Bunny" class="fade-image-y" style="max-width: 800px; margin: 0 auto;"/>
-    </div>
+    <figure class="embed-section" style="text-align:center; max-width: 1000px; margin: 0 auto;">
+        <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/LadygagaandBadbunny.webp" alt="Lady Gaga and Bad Bunny" class="fade-image-y" />
+        <figcaption class="image-caption">Bad Bunny alongside surprise guest Lady Gaga inside La Casita.</figcaption>
+    </figure>
 
-    <div class="label" style="padding: 0 clamp(2rem, 6vw, 5rem); margin-bottom: 1.5rem;">The Guest Network</div>
+    <div class="label" style="padding: 0 clamp(2rem, 6vw, 5rem); margin-bottom: 2rem;">The Guest Network</div>
     <div class="guests-grid">
-      <div class="guest-card" onclick="this.classList.toggle('open')">
+      <div class="guest-card">
         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/PedroPascal.webp" alt="Pedro Pascal" class="guest-img" />
         <div class="guest-name">Pedro Pascal</div>
         <div class="guest-role">Actor</div>
       </div>
-      <div class="guest-card" onclick="this.classList.toggle('open')">
+      <div class="guest-card">
         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/d2686efa3bfeef2841e817fc9df86be20ee362ba/ladygaga%20profile.jpg" alt="Lady Gaga" class="guest-img" />
         <div class="guest-name">Lady Gaga</div>
         <div class="guest-role">Artist</div>
       </div>
-      <div class="guest-card" onclick="this.classList.toggle('open')">
+      <div class="guest-card">
         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/cardib%20profile.jpg" alt="Cardi B" class="guest-img" />
         <div class="guest-name">Cardi B</div>
         <div class="guest-role">Rapper</div>
       </div>
-      <div class="guest-card" onclick="this.classList.toggle('open')">
+      <div class="guest-card">
         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/jessicaalba.jpg" alt="Jessica Alba" class="guest-img" />
         <div class="guest-name">Jessica Alba</div>
         <div class="guest-role">Actress</div>
       </div>
-      <div class="guest-card" onclick="this.classList.toggle('open')">
+      <div class="guest-card">
         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/TonitaCay.avif" alt="Toñita Cay" class="guest-img" />
         <div class="guest-name">Toñita Cay</div>
         <div class="guest-role">NYC Legend</div>
       </div>
-      <div class="guest-card" onclick="this.classList.toggle('open')">
+      <div class="guest-card">
         <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/d2686efa3bfeef2841e817fc9df86be20ee362ba/Ricky%20Martin%20profile.avif" alt="Ricky Martin" class="guest-img" />
         <div class="guest-name">Ricky Martin</div>
         <div class="guest-role">Icon</div>
@@ -761,11 +927,11 @@
     </div>
 
     <!-- Lady Gaga IG Embed -->
-    <div class="embed-section" style="max-width: 500px; margin: 3rem auto 0;">
-        <div class="label" style="margin-bottom:1rem; text-align:center;">Lady Gaga Singing "Die With A Smile"</div>
-        <div class="embed-card">
-            <div class="ig-wrap" style="padding: 1rem; display:flex; justify-content:center;">
-                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DUhp-_7kU1S/" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote>
+    <div class="embed-section" style="max-width: 600px; margin: 4rem auto 0;">
+        <div class="label" style="margin-bottom:1.5rem; text-align:center;">Lady Gaga Singing "Die With A Smile"</div>
+        <div style="background: var(--surface); padding: 1.5rem; border: 2px solid var(--text-main); box-shadow: 10px 10px 0px rgba(0,0,0,0.1);">
+            <div style="display:flex; justify-content:center;">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DUhp-_7kU1S/" data-instgrm-version="14" style=" background:#FFF; border:0; margin: 0; max-width:540px; min-width:326px; padding:0; width:100%;"></blockquote>
             </div>
         </div>
     </div>
@@ -774,11 +940,10 @@
   <!-- ============================================================
        CHAPTER 4 — LO QUE LE PASÓ A HAWÁI
   ============================================================ -->
-  <section class="scene" id="scene-hawaii" style="margin-top: 4rem;">
+  <section class="scene" id="scene-hawaii" style="margin-top: 6rem;">
     <div class="chapter-break fade-in" style="position:relative; z-index:3;">
-      <span class="chapter-num" aria-hidden="true">04</span>
-      <div class="break-line"></div>
       <span class="label">Chapter Four</span>
+      <div class="break-line"></div>
     </div>
 
     <div class="sticky-wrap">
@@ -794,6 +959,10 @@
           <p>
             Everyone expected <em>Livin' la Vida Loca</em>. Instead, Ricky Martin delivered an excerpt from Bad Bunny's <strong>"Lo Que Le Pasó a Hawái"</strong> — framing Hawaii as a cautionary tale for Puerto Rico.
           </p>
+          <div class="lyrics-block">
+            <div class="lyrics-es">"Se vendió el río, se vendió la playa…"</div>
+            <div class="lyrics-en">The river was sold. The beach was sold.</div>
+          </div>
         </div>
       </div>
     </div>
@@ -803,24 +972,23 @@
        CHAPTER 5 — THE LIGHT BLUE FLAG
   ============================================================ -->
   <section id="flag-section" class="fade-in">
-    <div class="chapter-break" style="grid-column:1/-1; padding:0;">
-      <span class="chapter-num" aria-hidden="true">05</span>
-      <div class="break-line"></div>
+    <div class="chapter-break" style="grid-column:1/-1; padding-left:0; padding-right:0;">
       <span class="label">Chapter Five</span>
+      <div class="break-line"></div>
     </div>
 
     <div>
       <div class="label" style="margin-bottom:0.8rem;">The Azul Celeste</div>
-      <h2 style="font-size:clamp(2rem,4vw,3rem); margin-bottom:1.2rem;">Colors Carry History</h2>
+      <h2 style="font-size:clamp(2.5rem,5vw,4rem); margin-bottom:1.5rem;">Colors Carry History</h2>
       <p>
-        The Puerto Rican flag that waved was not the modern dark navy blue — it was <em>azul celeste</em>, a pale sky blue. Under the <strong>Gag Law (Law 53 of 1948)</strong>, displaying this flag was a criminal offence.
+        The Puerto Rican flag that waved was not the modern dark navy blue — it was <em>azul celeste</em>, a pale sky blue. Under the <strong>Gag Law (Law 53 of 1948)</strong>, displaying this specific flag was a criminal offence.
       </p>
     </div>
 
     <div class="flag-visual">
       <div class="flag-item">
         <div class="flag-svg-wrap">
-          <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" style="display:block;">
             <rect width="900" height="120" y="0"   fill="#C8102E"/>
             <rect width="900" height="120" y="120" fill="#FFFFFF"/>
             <rect width="900" height="120" y="240" fill="#C8102E"/>
@@ -839,15 +1007,16 @@
   </section>
 
   <!-- Real Wedding Image -->
-  <div class="embed-section fade-in">
-      <div class="label" style="text-align: center; margin-bottom: 1rem;">A Real Wedding During the Halftime Show</div>
-      <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/d2686efa3bfeef2841e817fc9df86be20ee362ba/wedding%40superbowl.jpg" alt="Wedding at Super Bowl" class="fade-image-y" style="max-width: 800px; margin: 0 auto;"/>
-  </div>
+  <figure class="embed-section fade-in" style="max-width: 1000px; margin: 0 auto;">
+      <div class="label" style="text-align: center; margin-bottom: 1.5rem;">A Real Wedding During the Halftime Show</div>
+      <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/d2686efa3bfeef2841e817fc9df86be20ee362ba/wedding%40superbowl.jpg" alt="Wedding at Super Bowl" class="fade-image-y" />
+      <figcaption class="image-caption">Couples were legally married on the field amidst the unfolding performance.</figcaption>
+  </figure>
 
   <!-- ============================================================
        FINALE VISUAL — PR CROWD IMAGE
   ============================================================ -->
-  <section class="scene" id="finale">
+  <section class="scene" id="finale" style="margin-top: 4rem;">
     <div class="sticky-wrap">
       <div class="sticky-bg" id="finale-bg"></div>
       <div class="sticky-overlay"></div>
@@ -866,43 +1035,48 @@
     </div>
   </section>
   
-  <div class="embed-section fade-in">
-    <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Together%20we%20are%20america.webp" alt="Together We Are America Football" class="fade-image-y" style="max-width: 800px; margin: 0 auto; display: block;" />
-  </div>
+  <figure class="embed-section fade-in" style="max-width: 1000px; margin: 0 auto;">
+    <img src="https://raw.githubusercontent.com/ruhundutta/BadBunny/2c4d9d2a910b7b0314782eda43d66b425c2ea02a/Together%20we%20are%20america.webp" alt="Together We Are America Football" class="fade-image-y" />
+    <figcaption class="image-caption">The controversial football spiked at the performance's climax.</figcaption>
+  </figure>
 
   <!-- ============================================================
-       THE SETLIST
+       THE SETLIST & APPLE MUSIC
   ============================================================ -->
   <section id="setlist-section" class="fade-in embed-section">
-      <div class="chapter-break" style="padding: 2rem 0;">
-        <span class="chapter-num" aria-hidden="true">||</span>
-        <div class="break-line"></div>
-        <span class="label">The 2026 Setlist</span>
+      <div class="chapter-break" style="padding: 2rem 0; justify-content: center;">
+        <span class="label" style="font-size: 2rem;">The 2026 Setlist</span>
       </div>
       
-      <p style="color: var(--text-muted); max-width: 60ch; font-size: 1.1rem; margin-bottom: 2rem;">
+      <!-- Apple Music Embed -->
+      <div style="max-width: 660px; margin: 0 auto 4rem;">
+        <div class="label" style="margin-bottom: 1rem; text-align: center;">Listen to the Official Playlist</div>
+        <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="450" style="width:100%; max-width:660px; overflow:hidden; border: 2px solid var(--text-main); box-shadow: 10px 10px 0px rgba(0,0,0,0.1); border-radius:0px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/us/playlist/bad-bunnys-super-bowl-lx-halftime-show-set-list/pl.19e0cad995c3481eba600fa7a27d576d"></iframe>
+      </div>
+
+      <p style="color: var(--text-muted); max-width: 70ch; font-size: 1.2rem; margin: 0 auto 3rem; text-align: center; font-family: var(--font-headline); font-style: italic;">
           Every song served a distinct narrative purpose, shifting from global pop anthems to deeply rooted Caribbean storytelling. Relive the performances below.
       </p>
 
       <div class="setlist-grid">
           <div>
-              <div class="label" style="margin-bottom: 0.5rem;">Tití Me Preguntó</div>
+              <div class="label" style="margin-bottom: 0.8rem;">Tití Me Preguntó</div>
               <iframe src="https://www.youtube.com/embed/juRFjpB5Ppg?si=lnZC30klR6LurC9i" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
           <div>
-              <div class="label" style="margin-bottom: 0.5rem;">Yo Perreo Sola</div>
+              <div class="label" style="margin-bottom: 0.8rem;">Yo Perreo Sola</div>
               <iframe src="https://www.youtube.com/embed/iFuqjC-LiH8?si=1IbXYs5o7w-TypB2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
           <div>
-              <div class="label" style="margin-bottom: 0.5rem;">VOY A LLeVARTE PA PR</div>
+              <div class="label" style="margin-bottom: 0.8rem;">VOY A LLeVARTE PA PR</div>
               <iframe src="https://www.youtube.com/embed/uE_pyM3X-e0?si=ykOSCLiW5gIyauPJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
           <div>
-              <div class="label" style="margin-bottom: 0.5rem;">LO QUE LE PASÓ A HAWAii</div>
+              <div class="label" style="margin-bottom: 0.8rem;">LO QUE LE PASÓ A HAWAii</div>
               <iframe src="https://www.youtube.com/embed/KMqquh3E4NE?si=dcurbb6iAXy9RxEF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
           <div>
-              <div class="label" style="margin-bottom: 0.5rem;">DtMF</div>
+              <div class="label" style="margin-bottom: 0.8rem;">DtMF</div>
               <iframe src="https://www.youtube.com/embed/TiebZllW8As?si=_zGvtOrjj0HV0WJ2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
       </div>
@@ -913,15 +1087,15 @@
   ============================================================ -->
   <section id="epilogue">
     <div class="label" style="margin-bottom:1rem;">Epilogue</div>
-    <h2>"The Performance Didn't End"</h2>
-    <p>
+    <h2 style="font-size: clamp(3rem, 6vw, 5rem);">"The Performance Didn't End"</h2>
+    <p style="font-size: 1.3rem; margin-top: 1.5rem;">
       The 13-minute show triggered an instantaneous, global, real-time debate. The digital network became an extension of the performance itself.
     </p>
 
     <!-- SNL Video Embed -->
-    <div style="margin: 3rem 0;">
-        <div class="label" style="margin-bottom: 0.5rem;">Bad Bunny Fires Back on SNL</div>
-        <iframe width="100%" style="aspect-ratio: 16/9; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);" src="https://www.youtube.com/embed/dvYHhjp1Wcw?si=Dt8l_tVtV_1wpGGx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <div style="margin: 4rem 0;">
+        <div class="label" style="margin-bottom: 1rem;">Bad Bunny Fires Back on SNL</div>
+        <iframe width="100%" style="aspect-ratio: 16/9; border: 2px solid var(--text-main); box-shadow: 10px 10px 0px rgba(0,0,0,0.1);" src="https://www.youtube.com/embed/dvYHhjp1Wcw?si=Dt8l_tVtV_1wpGGx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>
 
     <div class="timeline">
@@ -940,8 +1114,8 @@
       </div>
 
       <div class="tl-item climax">
-        <div class="tl-dot"></div>
-        <div class="tl-time">T+13:00 — The Spike</div>
+        <div class="tl-dot" style="border-color: var(--gold);"></div>
+        <div class="tl-time" style="color: var(--gold);">T+13:00 — The Spike</div>
         <div class="tl-head">"Together, We Are America"</div>
         <div class="tl-body">
           Bad Bunny spikes the football. The performance becomes a real-time global debate over history, borders, and identity.
@@ -955,10 +1129,10 @@
   ============================================================ -->
   <footer>
     <div>
-      <div class="footer-brand">BAD BUNNY<br />× SUPER BOWL</div>
+      <div class="footer-brand">BAD BUNNY<br />× SUPER BOWL <span class="lx-usa" style="background: linear-gradient(135deg, #B31942 30%, #fff 45%, #fff 55%, #0A3161 70%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">LX</span></div>
       <p class="footer-sub">An interactive scrollytelling deconstruction of the 2026 NFL Super Bowl Halftime Show.</p>
     </div>
-    <ul class="footer-links">
+    <ul class="footer-links" style="list-style: none;">
       <li><a href="#scene-apagon">El Apagón</a></li>
       <li><a href="#jersey-section">La Jersey</a></li>
       <li><a href="#scene-casita">La Casita</a></li>
@@ -974,17 +1148,6 @@
        JAVASCRIPT
   ============================================================ -->
   <script>
-    // ── Custom cursor ──
-    const cursor = document.getElementById('cursor');
-    document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-    });
-    document.querySelectorAll('a, button, .guest-card, iframe, .stage, .camera').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
-    });
-
     // ── Progress bar ──
     const progressBar = document.getElementById('progress-bar');
     window.addEventListener('scroll', () => {
@@ -1013,28 +1176,96 @@
     if (hawaiiBg) hawaiiBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/Ricky%20Martin%20and%20Lo%20Que%20Le%20Pas%C3%B3%20a%20Haw%C3%A1i.avif')";
     if (finaleBg) finaleBg.style.backgroundImage = "url('https://raw.githubusercontent.com/ruhundutta/BadBunny/346043078cfbb2ba0bbb73620412c415f82da8a1/bad-bunny-super-bowl-puerto-rico.webp')";
 
-    // ── Interactive D3.js Map ──
+    // ── Click Interactions for Hotspots ──
+    document.querySelectorAll('.hotspot').forEach(hotspot => {
+      hotspot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isActive = hotspot.classList.contains('active');
+        
+        // Close all other hotspots first
+        document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
+        
+        // Toggle the clicked one
+        if (!isActive) {
+          hotspot.classList.add('active');
+        }
+      });
+    });
+
+    // Close hotspots when clicking outside
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
+      // Close D3 tooltip if active
+      d3.select(".d3-tooltip").style("opacity", 0);
+      d3.selectAll(".stage").attr("fill", "rgba(85, 107, 47, 0.1)").attr("stroke", "#556b2f");
+      d3.selectAll(".camera-group circle").attr("r", d => d.r).attr("stroke", "#d3122e");
+      d3.selectAll(".camera-group line").attr("stroke", "#d3122e");
+    });
+
+    // ── Interactive D3.js Map (Click Based Blueprint) ──
     function renderD3Map() {
         const container = d3.select("#d3-map-container");
         if (container.empty()) return;
         
         const width = 800;
-        const height = 400;
+        const height = 450;
         
         const svg = container.append("svg")
             .attr("viewBox", `0 0 ${width} ${height}`)
             .style("width", "100%")
             .style("height", "auto")
-            .style("background-color", "#2e7d32") // Turf green
-            .style("border-radius", "8px");
+            .style("background-color", "#eceee5") // Light olive paper
+            .style("border-radius", "0px");
+
+        // Blueprint grid pattern (Olive tint)
+        const defs = svg.append("defs");
+        const pattern = defs.append("pattern")
+            .attr("id", "blueprint-grid")
+            .attr("width", 20)
+            .attr("height", 20)
+            .attr("patternUnits", "userSpaceOnUse");
+        pattern.append("path")
+            .attr("d", "M 20 0 L 0 0 0 20")
+            .attr("fill", "none")
+            .attr("stroke", "rgba(85, 107, 47, 0.15)")
+            .attr("stroke-width", 1);
+        svg.append("rect")
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("fill", "url(#blueprint-grid)");
+
+        // Levi's Stadium Architectural Outline
+        svg.append("path")
+            .attr("d", `M 150 70 Q 400 30 650 70 L 730 225 L 650 380 Q 400 420 150 380 L 100 225 Z`)
+            .attr("fill", "rgba(255,255,255,0.4)")
+            .attr("stroke", "rgba(17, 17, 17, 0.4)")
+            .attr("stroke-width", 2)
+            .attr("stroke-dasharray", "4,4");
+
+        // Levi's iconic SAP Tower
+        svg.append("rect")
+            .attr("x", 180).attr("y", 25)
+            .attr("width", 440).attr("height", 45)
+            .attr("fill", "rgba(85, 107, 47, 0.1)")
+            .attr("stroke", "rgba(17, 17, 17, 0.6)")
+            .attr("stroke-width", 2);
+
+        // Football Field Base
+        const fieldX = 200, fieldY = 120, fieldW = 400, fieldH = 180;
+        svg.append("rect")
+            .attr("x", fieldX).attr("y", fieldY)
+            .attr("width", fieldW).attr("height", fieldH)
+            .attr("fill", "none")
+            .attr("stroke", "rgba(17, 17, 17, 0.8)")
+            .attr("stroke-width", 2);
 
         // Yard lines
-        for(let i=40; i<width; i+=80) {
+        for(let i = fieldX + 40; i < fieldX + fieldW; i += 40) {
             svg.append("line")
-                .attr("x1", i).attr("y1", 0)
-                .attr("x2", i).attr("y2", height)
-                .style("stroke", "rgba(255,255,255,0.4)")
-                .style("stroke-width", 2);
+                .attr("x1", i).attr("y1", fieldY)
+                .attr("x2", i).attr("y2", fieldY + fieldH)
+                .style("stroke", "rgba(17, 17, 17, 0.2)")
+                .style("stroke-width", 1);
         }
 
         const tooltip = d3.select("body").append("div")
@@ -1042,15 +1273,15 @@
             .style("opacity", 0);
 
         const mapData = [
-            { type: "stage", name: "The Sugar Cane Field", x: 400, y: 200, w: 140, h: 90, desc: "380 performers acting as human scenery, dodging NFL motor restrictions." },
-            { type: "stage", name: "La Casita", x: 220, y: 200, w: 100, h: 100, desc: "The salmon-pink house modeled after Humacao, Puerto Rico." },
-            { type: "stage", name: "Urban Plaza", x: 580, y: 200, w: 100, h: 100, desc: "A recreation of the Nuyorican diaspora with Toñita's Bar." },
-            { type: "camera", name: "Sony VENICE 2", x: 400, y: 60, r: 10, desc: "Primary cinematic broadcast camera for wide shots." },
-            { type: "camera", name: "BURANO Steadicam", x: 200, y: 320, r: 10, desc: "Roving camera capturing intimate angles inside La Casita." },
-            { type: "camera", name: "FR7 PTZ", x: 600, y: 320, r: 10, desc: "Mounted robotic camera tracking high-speed dance choreography." }
+            { type: "stage", name: "The Sugar Cane Field", x: 400, y: 210, w: 140, h: 90, desc: "380 performers acting as human scenery, dodging NFL motor restrictions." },
+            { type: "stage", name: "La Casita", x: 250, y: 210, w: 80, h: 100, desc: "The salmon-pink house modeled after Humacao, Puerto Rico." },
+            { type: "stage", name: "Urban Plaza", x: 550, y: 210, w: 80, h: 100, desc: "A recreation of the Nuyorican diaspora with Toñita's Bar." },
+            { type: "camera", name: "Sony VENICE 2", x: 400, y: 90, r: 8, desc: "Primary cinematic broadcast camera mounted high for wide shots." },
+            { type: "camera", name: "BURANO Steadicam", x: 250, y: 320, r: 8, desc: "Roving camera capturing intimate angles inside La Casita." },
+            { type: "camera", name: "FR7 PTZ", x: 550, y: 320, r: 8, desc: "Mounted robotic camera tracking high-speed dance choreography." }
         ];
 
-        // Draw Stages
+        // Draw Stages (Clickable)
         svg.selectAll(".stage")
             .data(mapData.filter(d => d.type === "stage"))
             .enter().append("rect")
@@ -1059,57 +1290,63 @@
             .attr("y", d => d.y - d.h/2)
             .attr("width", d => d.w)
             .attr("height", d => d.h)
-            .attr("fill", "rgba(255, 255, 255, 0.85)")
-            .attr("stroke", "var(--text-main)")
+            .attr("fill", "rgba(85, 107, 47, 0.1)")
+            .attr("stroke", "#556b2f")
             .attr("stroke-width", 2)
-            .attr("rx", 6)
+            .attr("stroke-dasharray", "4,4")
             .style("cursor", "pointer")
-            .on("mouseover", function(event, d) {
-                d3.select(this).attr("fill", "var(--red)").attr("stroke", "#fff");
-                tooltip.transition().duration(200).style("opacity", 1);
-                tooltip.html(`<strong>${d.name}</strong>${d.desc}`)
+            .on("click", function(event, d) {
+                event.stopPropagation();
+                
+                // Reset others
+                d3.selectAll(".stage").attr("fill", "rgba(85, 107, 47, 0.1)").attr("stroke", "#556b2f");
+                d3.selectAll(".camera-group circle").attr("r", cam => cam.r).attr("stroke", "#d3122e");
+                d3.selectAll(".camera-group line").attr("stroke", "#d3122e");
+
+                // Highlight this
+                d3.select(this).attr("fill", "rgba(85, 107, 47, 0.3)").attr("stroke", "#111");
+                
+                tooltip.style("opacity", 1)
+                    .html(`<strong>${d.name}</strong>${d.desc}`)
                     .style("left", (event.pageX + 15) + "px")
                     .style("top", (event.pageY - 30) + "px");
-            })
-            .on("mousemove", function(event) {
-                tooltip.style("left", (event.pageX + 15) + "px")
-                       .style("top", (event.pageY - 30) + "px");
-            })
-            .on("mouseout", function() {
-                d3.select(this).attr("fill", "rgba(255, 255, 255, 0.85)").attr("stroke", "var(--text-main)");
-                tooltip.transition().duration(300).style("opacity", 0);
             });
 
-        // Draw Cameras
-        svg.selectAll(".camera")
+        // Draw Cameras (Clickable)
+        const cams = svg.selectAll(".camera-group")
             .data(mapData.filter(d => d.type === "camera"))
-            .enter().append("circle")
-            .attr("class", "camera")
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y)
-            .attr("r", d => d.r)
-            .attr("fill", "var(--gold)")
-            .attr("stroke", "#fff")
-            .attr("stroke-width", 3)
+            .enter().append("g")
+            .attr("class", "camera-group")
             .style("cursor", "pointer")
-            .on("mouseover", function(event, d) {
-                d3.select(this).attr("r", 14).attr("fill", "var(--red)");
-                tooltip.transition().duration(200).style("opacity", 1);
-                tooltip.html(`<strong>${d.name}</strong>${d.desc}`)
+            .on("click", function(event, d) {
+                event.stopPropagation();
+                
+                // Reset others
+                d3.selectAll(".stage").attr("fill", "rgba(85, 107, 47, 0.1)").attr("stroke", "#556b2f");
+                d3.selectAll(".camera-group circle").attr("r", cam => cam.r).attr("stroke", "#d3122e");
+                d3.selectAll(".camera-group line").attr("stroke", "#d3122e");
+
+                // Highlight this
+                d3.select(this).select("circle").attr("r", 12).attr("stroke", "#111");
+                d3.select(this).select("line").attr("stroke", "#111");
+
+                tooltip.style("opacity", 1)
+                    .html(`<strong>${d.name}</strong>${d.desc}`)
                     .style("left", (event.pageX + 15) + "px")
                     .style("top", (event.pageY - 30) + "px");
-            })
-            .on("mousemove", function(event) {
-                tooltip.style("left", (event.pageX + 15) + "px")
-                       .style("top", (event.pageY - 30) + "px");
-            })
-            .on("mouseout", function(event, d) {
-                d3.select(this).attr("r", d.r).attr("fill", "var(--gold)");
-                tooltip.transition().duration(300).style("opacity", 0);
             });
+            
+        cams.append("circle")
+            .attr("cx", d => d.x).attr("cy", d => d.y).attr("r", d => d.r)
+            .attr("fill", "#fff").attr("stroke", "#d3122e").attr("stroke-width", 3);
+            
+        cams.append("line")
+            .attr("x1", d => d.x).attr("y1", d => d.y)
+            .attr("x2", d => d.y < 200 ? d.x : d.x - 10)
+            .attr("y2", d => d.y < 200 ? d.y + 15 : d.y - 15)
+            .attr("stroke", "#d3122e").attr("stroke-width", 3);
     }
     
-    // Initialize Map on load
     document.addEventListener("DOMContentLoaded", renderD3Map);
 
   </script>
